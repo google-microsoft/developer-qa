@@ -11,13 +11,15 @@
 module.exports = {
   title: '程序员常见问题解答',
   tagline: '',
-  url: 'https://your-docusaurus-test-site.com',
-  baseUrl: '/',
   onBrokenLinks: 'throw',
+
+  url: 'https://google-microsoft.github.io/developer-QA/', // Your website URL
+  baseUrl: '/',
+  projectName: 'developer-QA',
+  organizationName: 'google-microsoft',
+
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
   themeConfig: {
     navbar: {
       title: '技术常见解决方案',
