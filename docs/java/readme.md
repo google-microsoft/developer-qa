@@ -1,0 +1,31 @@
+---
+id: java
+title: Style Guide
+sidebar_label: Style Guide
+---
+
+### 1.查找jar的进程并杀掉进度shell
+
+```
+p=`jcmd | grep tao-admin.jar | cut -d " " -f 1`
+
+kill -9 $p
+```
+
+### 2.打包targ.gz压缩和解压命令
+
+```
+压缩
+tar -zcvf develop-project.tar.gz dist
+
+解压
+tar -zxvf develop-project.tar.gz
+
+```
+
+### 3.修改springboot启动端口
+
+```
+idea运行配置上,VM options上加-Dserver.port=8006
+```
+
