@@ -14,7 +14,7 @@ module.exports = {
   onBrokenLinks: 'throw',
 
   url: 'https://google-microsoft.github.io/developer-QA/', // Your website URL
-  baseUrl: '/',
+  baseUrl: '/developer-QA/',
   projectName: 'developer-QA',
   organizationName: 'google-microsoft',
 
