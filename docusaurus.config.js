@@ -13,7 +13,7 @@ module.exports = {
   tagline: '',
   onBrokenLinks: 'throw',
 
-  url: 'https://google-microsoft.github.io/developer-QA/', // Your website URL
+  url: 'https://google-microsoft.github.io/developer-QA', // Your website URL
   baseUrl: '/developer-QA/',
   projectName: 'developer-QA',
   organizationName: 'google-microsoft',
@@ -39,6 +39,7 @@ module.exports = {
         {to: 'docs/maven/maven', label: 'Maven', position: 'left'},
         {to: 'docs/mysql/mysql', label: 'Mysql', position: 'left'},
         {to: 'docs/webstorm/webstorm', label: 'Webstorm', position: 'left'},
+        {to: 'docs/docusaurus/docusaurus', label: 'docusaurus', position: 'left'},
         {to: 'blog', label: 'Blog', position: 'right'},
         // Please keep GitHub link to the right for consistency.
         {
