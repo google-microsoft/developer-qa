@@ -2,6 +2,7 @@
 id: docusaurus
 title: docusaurus常见问题
 sidebar_label: Centos常见问题
+slug: /ide-info/docusaurus
 ---
 
 

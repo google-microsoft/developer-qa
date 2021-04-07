@@ -1,7 +1,8 @@
 ---
 id: java
-title: Style Guide
-sidebar_label: Style Guide
+title: java常见运维问题
+sidebar_label: java常见运维问题
+slug: /app-info/java
 ---
 
 ### 1.查找jar的进程并杀掉进度shell

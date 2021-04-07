@@ -29,18 +29,34 @@ module.exports = {
       },
       items: [
         {
-          to: 'docs',
-          label: 'Docs',
-          position: 'right',
+          label: '系统相关',
+          position: 'left',
+          items: [
+            {to: 'docs/os-info/centos', label: 'Centos'},
+          ],
         },
-        {to: 'docs/centos/centos', label: 'Centos', position: 'left'},
-        {to: 'docs/git/git', label: 'Git', position: 'left'},
-        {to: 'docs/java/java', label: 'Java', position: 'left'},
-        {to: 'docs/maven/maven', label: 'Maven', position: 'left'},
-        {to: 'docs/mysql/mysql', label: 'Mysql', position: 'left'},
-        {to: 'docs/webstorm/webstorm', label: 'Webstorm', position: 'left'},
-        {to: 'docs/docusaurus/docusaurus', label: 'docusaurus', position: 'left'},
-        {to: 'blog', label: 'Blog', position: 'right'},
+        {
+          label: '应用运维相关',
+          position: 'left',
+          items: [
+            {to: 'docs/app-info/', label: 'Introduce', position: 'left'},
+            {to: 'docs/app-info/git', label: 'Git', position: 'left'},
+            {to: 'docs/app-info/java', label: 'Java', position: 'left'},
+            {to: 'docs/app-info/maven', label: 'Maven', position: 'left'},
+            {to: 'docs/app-info/mysql', label: 'Mysql', position: 'left'},
+          ],
+        },
+
+        {
+          label: 'IDE相关',
+          position: 'left',
+          items: [
+            {to: 'docs/ide-info/webstorm', label: 'Webstorm', position: 'left'},
+            {to: 'docs/ide-info/docusaurus', label: 'docusaurus', position: 'left'},
+          ],
+        },
+        // {to: 'docs', label: 'Docs', position: 'right'},
+
         // Please keep GitHub link to the right for consistency.
         {
           href: 'https://github.com/facebook/docusaurus',
@@ -59,10 +75,13 @@ module.exports = {
       '@docusaurus/preset-classic',
       {
         docs: {
+          path: 'docs',
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
             'https://github.com/facebook/docusaurus/edit/master/website/',
+          showLastUpdateAuthor: false,
+          showLastUpdateTime: true,
         },
         blog: {
           showReadingTime: true,

@@ -2,6 +2,7 @@
 id: centos
 title: Centos常见问题
 sidebar_label: Centos常见问题
+slug: /os-info/centos
 ---
 
 ## 1.查看版本

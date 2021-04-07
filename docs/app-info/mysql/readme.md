@@ -1,7 +1,8 @@
 ---
 id: mysql
-title: Style Guide
-sidebar_label: Style Guide
+title: mysql常见运维问题
+sidebar_label: mysql常见运维问题
+slug: /app-info/mysql
 ---
 
 ### 1.xampp相关

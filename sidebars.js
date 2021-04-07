@@ -8,8 +8,35 @@
  */
 
 module.exports = {
-  someSidebar: {
-    Docusaurus: ['doc1', 'doc2', 'doc3'],
-    Features: ['mdx'],
-  },
+  docs: [
+    {
+      type: 'category',
+      label: '操作系统相关',
+      collapsed: false,
+      items: [
+        'os-info/centos/centos',
+      ],
+    },
+    {
+      type: 'category',
+      label: '应用程序运维相关',
+      collapsed: false,
+      items: [
+        'app-info/git/git',
+        'app-info/java/java',
+        'app-info/maven/maven',
+        'app-info/mysql/mysql',
+      ],
+    },
+
+    {
+      type: 'category',
+      label: 'IDE配置相关',
+      collapsed: false,
+      items: [
+        'ide-info/webstorm/webstorm',
+        'ide-info/docusaurus/docusaurus',
+      ],
+    },
+  ],
 };
