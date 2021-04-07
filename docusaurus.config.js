@@ -39,8 +39,8 @@ module.exports = {
           label: '应用运维相关',
           position: 'left',
           items: [
-            {to: 'docs/app-info/', label: 'Introduce', position: 'left'},
             {to: 'docs/app-info/git', label: 'Git', position: 'left'},
+            {to: 'docs/app-info/nginx', label: 'nginx', position: 'left'},
             {to: 'docs/app-info/java', label: 'Java', position: 'left'},
             {to: 'docs/app-info/maven', label: 'Maven', position: 'left'},
             {to: 'docs/app-info/mysql', label: 'Mysql', position: 'left'},

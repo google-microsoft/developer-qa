@@ -13,6 +13,15 @@ cat /etc/centos-release
 ```
 
 
+## 4.centos7打开3306端口
+
+```
+firewall-cmd --zone=public --add-port=3306/tcp --permanent
+
+firewall-cmd --reload
+
+```
+
 ## 2.安装redis
 
 ```

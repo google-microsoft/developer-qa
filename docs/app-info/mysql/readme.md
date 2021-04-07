@@ -5,7 +5,7 @@ sidebar_label: mysql常见运维问题
 slug: /app-info/mysql
 ---
 
-### 1.xampp相关
+## 1.xampp相关
 
 下载地址:https://www.apachefriends.org/index.html
 
@@ -17,7 +17,7 @@ slug: /app-info/mysql
 
 
 
-#### (1).重置xampp mysql root密码
+### (1).重置xampp mysql root密码
 
 ```
 vi /opt/lampp/etc/my.cnf
@@ -38,7 +38,7 @@ FLUSH PRIVILEGES;
 
  
 
-#### 2.xampp在centos中报错如下:
+### 2.xampp在centos中报错如下:
 
 ```
 opt/lampp/bin/gettext: error while loading shared libraries: libc.so.6: cannot open shared object file: No such file or directory 
@@ -66,29 +66,21 @@ if egrep "7 " /etc/redhat-release > /dev/null
 
 
 
-#### 3.远程访问mysql
+### 3.远程访问mysql
 
 ```output
 update user set host='%' where user='root';
 flush privileges;
 ```
 
-#### 4.centos7打开3306端口
 
-```
-firewall-cmd --zone=public --add-port=3306/tcp --permanent
-
-firewall-cmd --reload
-
-```
-
-#### 5.[com.mysql.jdbc.PacketTooBigException](https://stackoverflow.com/questions/11320236/com-mysql-jdbc-packettoobigexception)
+#### 3.[com.mysql.jdbc.PacketTooBigException](https://stackoverflow.com/questions/11320236/com-mysql-jdbc-packettoobigexception)
 
 ```
 SET GLOBAL max_allowed_packet = 1024*1024*14;
 ```
 
-#### 6.mysql_upgrade
+### 6.mysql_upgrade
 
 Error encountered when performing Introspect schema mysql: Column count of mysql.proc is wrong. Expected 21, found 20. Created with MariaDB 100108, now running 100418. Please use mysql_upgrade to fix this error.
 Column count of mysql.proc is wrong. Expected 21, found 20. Created with MariaDB 100108, now running 100418. Please use mysql_upgrade to fix this error

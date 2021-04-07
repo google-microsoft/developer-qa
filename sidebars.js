@@ -15,6 +15,7 @@ module.exports = {
       collapsed: false,
       items: [
         'os-info/centos/centos',
+        'os-info/docker/docker',
       ],
     },
     {
@@ -23,6 +24,7 @@ module.exports = {
       collapsed: false,
       items: [
         'app-info/git/git',
+        'app-info/nginx/nginx',
         'app-info/java/java',
         'app-info/maven/maven',
         'app-info/mysql/mysql',
