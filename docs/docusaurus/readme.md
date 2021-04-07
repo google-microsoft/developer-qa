@@ -23,7 +23,7 @@ echo $DEPLOYMENT_BRANCH一下,看看是不是真的一样
 如果一样,就改一下即可解决
 ```
 
-3.部署到github上,浏览异常,一般是如下修改
+## 3.部署到github上,浏览异常,一般是如下修改
 
 ```
   url: 'https://google-microsoft.github.io/developer-QA', // Your website URL

@@ -1,7 +1,6 @@
 ---
 id: webstorm
-title: Style Guide
-sidebar_label: Style Guide
+title: webstorm常见问题
 ---
 
 ### 1.[**webstorm** 在**Vue**项目下不识别**@**别名](https://segmentfault.com/a/1190000022495271)

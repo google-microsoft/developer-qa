@@ -4,14 +4,15 @@ title: Centos常见问题
 sidebar_label: Centos常见问题
 ---
 
-### 1.查看版本
+## 1.查看版本
 
 ```
 cat /etc/centos-release
 
 ```
 
-### 2.安装redis
+
+## 2.安装redis
 
 ```
 wget https://download.redis.io/releases/redis-6.2.1.tar.gz
@@ -32,7 +33,7 @@ yum install gcc-c++ yum install gcc
 
 然后重新解压,重新make
 
-#### (1).打开6379端口
+### (1).redis打开6379端口
 
 ```
 firewall-cmd --zone=public --add-port=6379/tcp --permanent
@@ -41,7 +42,7 @@ firewall-cmd --reload
 
 ```
 
-#### (2)Redis启动多端口、运行多实例
+### (2).Redis启动多端口、运行多实例
 
 ```
 redis-server --port 6380 & 
