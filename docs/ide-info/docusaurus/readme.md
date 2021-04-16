@@ -2,6 +2,7 @@
 id: docusaurus
 title: docusaurus常见问题
 sidebar_label: docusaurus常见问题
+
 slug: /ide-info/docusaurus
 ---
 
@@ -34,3 +35,31 @@ echo $DEPLOYMENT_BRANCH一下,看看是不是真的一样
 把baseUrl改成二级路径
 ```
 
+## 4. Docusaurus found broken links!
+
+```angular2html
+error building locale=en
+Error: Docusaurus found broken links!
+
+Please check the pages of your site in the list bellow, and make sure you don't reference any path that does not exist.
+Note: it's possible to ignore broken links with the 'onBrokenLinks' Docusaurus configuration, and let the build pass.
+
+Exhaustive list of all broken links found:
+
+- On source page path = /bookmarks-site/:
+   -> linking to /bookmarks-site/docs/
+
+```
+这种是因为docs目录下,需要一个默认目录
+
+比如在docs下加一个introduce.md
+内容如下:
+
+```markdown
+---
+id: docs
+title: introduce
+sidebar_label: introduce
+slug: /
+---
+```
