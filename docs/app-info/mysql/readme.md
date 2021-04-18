@@ -80,9 +80,16 @@ flush privileges;
 SET GLOBAL max_allowed_packet = 1024*1024*14;
 ```
 
-### 6.mysql_upgrade
+### 4.查询mysql死锁并杀死进程
 
-Error encountered when performing Introspect schema mysql: Column count of mysql.proc is wrong. Expected 21, found 20. Created with MariaDB 100108, now running 100418. Please use mysql_upgrade to fix this error.
-Column count of mysql.proc is wrong. Expected 21, found 20. Created with MariaDB 100108, now running 100418. Please use mysql_upgrade to fix this error
- (5 sec, 296 ms)
+```
+SELECT trx_mysql_thread_id, trx_state, trx_query
+FROM INFORMATION_SCHEMA.INNODB_TRX;
+```
+
+杀死进程
+
+```
+杀掉进程          KILL 进程id;
+```
 
