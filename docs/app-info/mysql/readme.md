@@ -93,3 +93,13 @@ FROM INFORMATION_SCHEMA.INNODB_TRX;
 杀掉进程          KILL 进程id;
 ```
 
+
+
+### 5.导出mysql数据库命令
+
+
+
+```
+mysqldump -u root -p ry-vue > sql/all.sql
+```
+
