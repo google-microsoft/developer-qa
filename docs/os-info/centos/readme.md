@@ -26,6 +26,13 @@ systemctl start firewalld
 ```
 开启防火墙，没有任何提示即开启成功。
 
+关闭防火墙:
+
+``` 
+systemctl stop firewalld
+```
+
+
 ## 4.centos7打开,关闭3306端口
 
 ```
