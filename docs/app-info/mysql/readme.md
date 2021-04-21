@@ -17,18 +17,18 @@ slug: /app-info/mysql
 
 
 
+
 ### (1).重置xampp mysql root密码
 
 ```
 vi /opt/lampp/etc/my.cnf
-Add a sentence to the paragraph of [mysqld]:skip-grant-tables,which is:
-E.g:
-[mysqld]
-datadir=/var/lib/mysql
-socket=/var/lib/mysql/mysql.sock
-skip-name-resolve
-skip-grant-tables
 
+[client]
+user = root
+password        = password
+port            =3306
+
+然后,登陆用root/passowrd
 
 update mysql.user set password=password('hedaye') where user='root';
 FLUSH PRIVILEGES;
