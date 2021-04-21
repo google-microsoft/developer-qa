@@ -12,11 +12,28 @@ cat /etc/centos-release
 
 ```
 
+## 3.防火墙开启和关闭
+通过
+``` 
+systemctl status firewalld
 
-## 4.centos7打开3306端口
+```
+查看firewalld状态，发现当前是dead状态，即防火墙未开启。
+
+通过
+``` 
+systemctl start firewalld
+```
+开启防火墙，没有任何提示即开启成功。
+
+## 4.centos7打开,关闭3306端口
 
 ```
 firewall-cmd --zone=public --add-port=3306/tcp --permanent
+
+firewall-cmd --reload
+
+firewall-cmd --remove-port=3306/tcp --permanent
 
 firewall-cmd --reload
 
