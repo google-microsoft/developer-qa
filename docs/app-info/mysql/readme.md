@@ -95,11 +95,16 @@ FROM INFORMATION_SCHEMA.INNODB_TRX;
 
 
 
-### 5.导出mysql数据库命令
+### 5.导出,导入mysql数据库命令
 
 
 
 ```
+导出:
 mysqldump -u root -p ry-vue > sql/all.sql
+
+导入:
+mysql -u root -p  ry-vue < sql/all.sql
+
 ```
 
