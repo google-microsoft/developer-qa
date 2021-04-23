@@ -99,7 +99,12 @@ logfile : logfile/var/log/redis/redis_6380.log
 
 rdbfile : dbfilenamedump_6380.rdb
 
-## 5. 自动输入msyql密码:
+## 5. 自动输入密码:
+ 在这之前要有expect 如果没有请如下安装expect
+```shell
+yum -y install expect
+```
+然后
 ```shell
 #!/usr/bin/expect
 spawn ./exportdb.sh
