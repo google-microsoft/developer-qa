@@ -104,7 +104,49 @@ FROM INFORMATION_SCHEMA.INNODB_TRX;
 mysqldump -u root -p ry-vue > sql/all.sql
 
 导入:
+
 mysql -u root -p  ry-vue < sql/all.sql
 
 ```
 
+## 6. 自动输入msyql密码:
+```shell
+#!/usr/bin/expect
+spawn ./exportdb.sh
+expect "Enter password:"
+send "password\n"
+
+或者
+
+#!/usr/bin/expect
+spawn ./importdb.sh
+expect "Enter password:"
+send "password\n"
+
+```
+这里重点命令是:spawn,expect,send,这里的"interact"可以不要
+可以不要
+注意:
+这里的
+```shell
+./exportdb.sh
+./importdb.sh
+```
+这里是必需分开写的,不然,自动输入密码会无效
+
+1.入口文件要加头:
+```shell
+#!/usr/bin/expect
+```
+2.exportdb.sh文件内容
+```shell
+#!/usr/bin/env bash
+mysqldump -u root -p ry-vue > sql/all.sql
+
+```
+3.importdb.sh文件内容
+```shell
+#!/usr/bin/env bash
+mysql -u root -p  ry-vue < sql/all.sql
+
+```

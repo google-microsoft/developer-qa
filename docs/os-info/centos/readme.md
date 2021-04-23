@@ -12,7 +12,8 @@ cat /etc/centos-release
 
 ```
 
-## 3.防火墙开启和关闭
+## 2.防火墙开启和关闭
+
 通过
 ``` 
 systemctl status firewalld
@@ -33,7 +34,7 @@ systemctl stop firewalld
 ```
 
 
-## 4.centos7打开,关闭3306端口
+## 3.centos7打开,关闭3306端口
 
 ```
 firewall-cmd --zone=public --add-port=3306/tcp --permanent
@@ -46,7 +47,7 @@ firewall-cmd --reload
 
 ```
 
-## 2.安装redis
+## 4.安装redis
 
 ```
 wget https://download.redis.io/releases/redis-6.2.1.tar.gz
@@ -98,3 +99,43 @@ logfile : logfile/var/log/redis/redis_6380.log
 
 rdbfile : dbfilenamedump_6380.rdb
 
+## 5. 自动输入msyql密码:
+```shell
+#!/usr/bin/expect
+spawn ./exportdb.sh
+expect "Enter password:"
+send "password\n"
+
+或者
+
+#!/usr/bin/expect
+spawn ./importdb.sh
+expect "Enter password:"
+send "password\n"
+
+```
+这里重点命令是:spawn,expect,send,这里的"interact"可以不要
+注意:
+这里的
+```shell
+./exportdb.sh
+./importdb.sh
+```
+这里是必需分开写的,不然,自动输入密码会无效
+
+1.入口文件要加头:
+```shell
+#!/usr/bin/expect
+```
+2.exportdb.sh文件内容
+```shell
+#!/usr/bin/env bash
+mysqldump -u root -p ry-vue > sql/all.sql
+
+```
+3.importdb.sh文件内容
+```shell
+#!/usr/bin/env bash
+mysql -u root -p  ry-vue < sql/all.sql
+
+```
