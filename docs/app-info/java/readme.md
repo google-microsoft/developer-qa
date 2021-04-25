@@ -1,9 +1,7 @@
 ---
 id: java
-
 title: java常见运维问题
-sidebar_label: 
-
+sidebar_label: java常见运维问题
 slug: /app-info/java
 ---
 

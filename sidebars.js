@@ -26,6 +26,7 @@ module.exports = {
         'app-info/git/git',
         'app-info/nginx/nginx',
         'app-info/java/java',
+        'app-info/java/ruoyi',
         'app-info/maven/maven',
         'app-info/mysql/mysql',
       ],
