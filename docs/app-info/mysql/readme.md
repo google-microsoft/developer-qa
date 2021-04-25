@@ -110,6 +110,13 @@ mysql -u root -p  ry-vue < sql/all.sql
 ```
 
 ## 6. 自动输入msyql密码:
+### 第一种方法:
+```shell
+#!/usr/bin/env bash
+
+mysqldump -uroot -p123456 -hlocalhost --databases tao --tables gen_table gen_table_column sys_dict_data sys_dict_type  >sql/backupsetup.sql
+```
+### 第二种方法:
 ```shell
 #!/usr/bin/expect
 spawn ./exportdb.sh
