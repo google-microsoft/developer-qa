@@ -25,8 +25,15 @@ module.exports = {
       items: [
         'app-info/git/git',
         'app-info/nginx/nginx',
-        'app-info/java/java',
-        'app-info/java/ruoyi',
+        {
+          type: 'category',
+          label: 'java系列',
+          collapsed: false,
+          items: [
+            'app-info/java/java',
+            'app-info/java/ruoyi',
+          ],
+        },
         'app-info/maven/maven',
         'app-info/mysql/mysql',
       ],
