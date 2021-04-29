@@ -275,6 +275,8 @@ Please execute the command: systemctl enable v2ray; systemctl start v2ray
 
 ### 客户商用配置文件:
 
+参考:https://intmainreturn0.com/v2ray-config-gen/#
+
 记得把"address": "localhost",改成远程的服务器的地址
 
 ```
@@ -389,6 +391,24 @@ Please execute the command: systemctl enable v2ray; systemctl start v2ray
 systemctl start v2ray.service
 停止:
 systemctl stop v2ray.service
+```
+
+### 客户端下载
+
+参考:https://www.v2ray.com/en/awesome/tools.html
+
+#### mac端V2rayU
+
+```
+https://github.com/yanue/V2rayU/releases
+```
+
+#### ios:
+
+在app store搜索,注意要是国外的apple ID
+
+```
+i2Ray
 ```
 
 
