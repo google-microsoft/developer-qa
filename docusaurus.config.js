@@ -33,6 +33,7 @@ module.exports = {
           position: 'left',
           items: [
             {to: 'docs/os-info/centos', label: 'Centos'},
+            {to: 'docs/os-info/ubuntu', label: 'ubuntu'},
           ],
         },
         {

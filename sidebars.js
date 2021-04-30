@@ -15,6 +15,7 @@ module.exports = {
       collapsed: false,
       items: [
         'os-info/centos/centos',
+        'os-info/centos/ubuntu',
         'os-info/docker/docker',
       ],
     },

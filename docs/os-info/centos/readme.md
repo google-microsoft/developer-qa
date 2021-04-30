@@ -388,9 +388,18 @@ Please execute the command: systemctl enable v2ray; systemctl start v2ray
 ### 启动v2ray
 
 ```
+
+# 开机启动
+systemctl enable v2ray 
+
+# 启动
+
 systemctl start v2ray.service
+
 停止:
+
 systemctl stop v2ray.service
+
 ```
 
 ### 客户端下载
