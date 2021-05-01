@@ -1,5 +1,8 @@
 ---
-id: ruoyi title: ruoyi常见运维问题 sidebar_label: ruoyi常见运维问题 slug: /app-info/ruoyi
+id: ruoyi 
+title: ruoyi常见运维问题 
+sidebar_label: ruoyi常见运维问题 
+slug: /app-info/ruoyi
 ---
 
 ## 1.升级jdk到15
@@ -256,7 +259,7 @@ export default {
   },
 }
 ```
-(3). 添加字段configurationmanagement_navigationOptions,注意,自行动态改变configurationmanagement_navigationOptions数据
+(3). 添加字段configurationmanagement_navigationOptions,注意,自行动态改变
 
 ```javascript
 import Treeselect from '@riophae/vue-treeselect'
