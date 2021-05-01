@@ -216,7 +216,9 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
 
 ## 3.在ruoyi-vue加谷歌验证码
 
-## ruoyi-vue实现图片预览和点击这么放大
+## 4.ruoyi-vue前端问题
+
+### 1. ruoyi-vue实现图片预览和点击这么放大
 ```html
 把这里imgUrl改成自己的字段即可
 
