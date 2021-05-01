@@ -216,3 +216,17 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
 
 ## 3.在ruoyi-vue加谷歌验证码
 
+## ruoyi-vue实现图片预览和点击这么放大
+```html
+把这里imgUrl改成自己的字段即可
+
+ <el-table-column label="图片url" align="center">
+        <template slot-scope="scope">
+          <el-image 
+                    style="width: 80px; height: 80px"
+                    :src="scope.row.imgUrl"
+                    :preview-src-list="[scope.row.imgUrl]"
+          ></el-image>
+        </template>
+      </el-table-column>
+```
