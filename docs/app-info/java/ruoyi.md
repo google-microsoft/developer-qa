@@ -1,8 +1,5 @@
 ---
-id: ruoyi
-title: ruoyi常见运维问题
-sidebar_label: ruoyi常见运维问题
-slug: /app-info/ruoyi
+id: ruoyi title: ruoyi常见运维问题 sidebar_label: ruoyi常见运维问题 slug: /app-info/ruoyi
 ---
 
 ## 1.升级jdk到15
@@ -10,26 +7,28 @@ slug: /app-info/ruoyi
 ### 1.Execution default of goal org.springframework.boot:spring-boot-maven-plugin:2.1.1.RELEASE:repackage failed: Unsupported class file major version 59 -> [Help 1]
 
 ```xml
+
 <groupId>org.springframework.boot</groupId>
 <artifactId>spring-boot-maven-plugin</artifactId>
 <version>2.1.1.RELEASE</version>
 <configuration>
-    <fork>true</fork> <!-- 如果没有该配置，devtools不会生效 -->
+<fork>true</fork> <!-- 如果没有该配置，devtools不会生效 -->
 </configuration>
 ```
 
 这里加spring-boot-maven-plugin插件要加class入口:
 
 ```xml
+
 <mainClass>com.ruoyi.RuoYiApplication</mainClass>
-如:
+        如:
 
 <groupId>org.springframework.boot</groupId>
 <artifactId>spring-boot-maven-plugin</artifactId>
 <version>2.1.1.RELEASE</version>
 <configuration>
-  <fork>true</fork> <!-- 如果没有该配置，devtools不会生效 -->
-  <mainClass>com.ruoyi.RuoYiApplication</mainClass>
+<fork>true</fork> <!-- 如果没有该配置，devtools不会生效 -->
+<mainClass>com.ruoyi.RuoYiApplication</mainClass>
 </configuration>
 
 ```
@@ -37,6 +36,7 @@ slug: /app-info/ruoyi
 ### 2.ruoyi-framework 的模块下加以下依赖
 
 ```xml
+
 <dependency>
     <groupId>javax.xml.bind</groupId>
     <artifactId>jaxb-api</artifactId>
@@ -53,14 +53,13 @@ slug: /app-info/ruoyi
 由于`>= jdk9`中不再包含这个`jar`包，所以需要在`ruoyi-framework\pom.xml`手动添加依赖。
 
 ```xml
+
 <dependency>
-	<groupId>javax.xml.bind</groupId>
-	<artifactId>jaxb-api</artifactId>
-	<version>2.3.0</version>
+    <groupId>javax.xml.bind</groupId>
+    <artifactId>jaxb-api</artifactId>
+    <version>2.3.0</version>
 </dependency>
 ```
-
-
 
 ## 2.ruoyi-vue自定义密码匹配器
 
@@ -100,14 +99,12 @@ xml依赖:
 
 ```xml
 <!--用于PHP密码兼容PHPpasswordHash和PHPpasswordVerify方法-->
-		<dependency>
-			<groupId>at.favre.lib</groupId>
-			<artifactId>bcrypt</artifactId>
-			<version>0.9.0</version>
-		</dependency>
+<dependency>
+    <groupId>at.favre.lib</groupId>
+    <artifactId>bcrypt</artifactId>
+    <version>0.9.0</version>
+</dependency>
 ```
-
-
 
 ```java
 package com.ruoyi.common.utils;
@@ -212,23 +209,68 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
 
 ```
 
-
-
 ## 3.在ruoyi-vue加谷歌验证码
 
 ## 4.ruoyi-vue前端问题
 
 ### 1. ruoyi-vue实现图片预览和点击这么放大
+
 ```html
 把这里imgUrl改成自己的字段即可
 
- <el-table-column label="图片url" align="center">
-        <template slot-scope="scope">
-          <el-image 
-                    style="width: 80px; height: 80px"
-                    :src="scope.row.imgUrl"
-                    :preview-src-list="[scope.row.imgUrl]"
-          ></el-image>
-        </template>
-      </el-table-column>
+<el-table-column label='图片url' align='center'>
+  <template slot-scope='scope'>
+    <el-image
+      style='width: 80px; height: 80px'
+      :src='scope.row.imgUrl'
+      :preview-src-list='[scope.row.imgUrl]'
+    ></el-image>
+  </template>
+</el-table-column>
+```
+
+### 2. 实现树形选择
+
+(1) 写入html
+
+```html
+
+<el-form-item label='父级ID' prop='parentId'>
+  <treeselect v-model='form.parentId' :options='configurationmanagement_navigationOptions'
+              :normalizer='normalizer' placeholder='请选择父级ID'
+  />
+</el-form-item>
+
+
+```
+
+(2). 导入包
+
+```javascript
+import Treeselect from '@riophae/vue-treeselect'
+
+export default {
+  name: 'Configurationmanagement_navigation',
+  components: {
+    Treeselect
+  },
+}
+```
+(3). 添加字段configurationmanagement_navigationOptions,注意,自行动态改变configurationmanagement_navigationOptions数据
+
+```javascript
+import Treeselect from '@riophae/vue-treeselect'
+
+export default {
+  name: 'Configurationmanagement_navigation',
+  components: {
+    Treeselect
+  },
+  data() {
+    return {
+      // 导航配置树选项
+      configurationmanagement_navigationOptions: [],
+    }
+  },
+}
 ```
