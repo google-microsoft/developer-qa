@@ -33,6 +33,7 @@ module.exports = {
           items: [
             'app-info/java/java',
             'app-info/java/ruoyi',
+            'app-info/java/ruoyifontend',
           ],
         },
         'app-info/maven/maven',
