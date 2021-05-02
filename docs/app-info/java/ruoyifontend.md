@@ -103,9 +103,10 @@ html上
 
 注意:如果要把上传结果的url以form单元提交到数据库就要加v-model 如下:
 
-```vue
+```html
 
 <ImageUpload v-model='form.navIcon' />
+
 ```
 
 即可
@@ -163,7 +164,7 @@ export default {
       }
     };
   },
-  methods:{
+  methods: {
     /** 提交按钮 */
     submitForm: function() {
       //调用验证代码
@@ -192,93 +193,171 @@ export default {
 
 ### (2)把rules绑定到form表单中.
 
-```vue
+```html
 
 <el-dialog :title='title' :visible.sync='open' width='600px' append-to-body>
-<el-form ref='form' :model='form' :rules='rules' label-width='80px'>
-  <el-row>
-    <el-col :span='12'>
-      <el-form-item label='用户昵称' prop='nickName'>
-        <el-input v-model='form.nickName' placeholder='请输入用户昵称' />
-      </el-form-item>
-    </el-col>
-  </el-row>
-  <el-row>
-    <el-col :span='12'>
-      <el-form-item label='手机号码' prop='phonenumber'>
-        <el-input v-model='form.phonenumber' placeholder='请输入手机号码' maxlength='11' />
-      </el-form-item>
-    </el-col>
-    <el-col :span='12'>
-      <el-form-item label='邮箱' prop='email'>
-        <el-input v-model='form.email' placeholder='请输入邮箱' maxlength='50' />
-      </el-form-item>
-    </el-col>
-  </el-row>
-  <el-row>
-    <el-col :span='12'>
-      <el-form-item v-if='form.userId == undefined' label='用户名称' prop='userName'>
-        <el-input v-model='form.userName' placeholder='请输入用户名称' />
-      </el-form-item>
-    </el-col>
-    <el-col :span='12'>
-      <el-form-item v-if='form.userId == undefined' label='用户密码' prop='password'>
-        <el-input v-model='form.password' placeholder='请输入用户密码' type='password' />
-      </el-form-item>
-    </el-col>
-  </el-row>
-  <el-row>
-    <el-col :span='12'>
-      <el-form-item label='用户性别'>
-        <el-select v-model='form.sex' placeholder='请选择'>
-          <el-option
-            v-for='dict in sexOptions'
-            :key='dict.dictValue'
-            :label='dict.dictLabel'
-            :value='dict.dictValue'
-          ></el-option>
-        </el-select>
-      </el-form-item>
-    </el-col>
-    <el-col :span='12'>
-      <el-form-item label='状态'>
-        <el-radio-group v-model='form.status'>
-          <el-radio
-            v-for='dict in statusOptions'
-            :key='dict.dictValue'
-            :label='dict.dictValue'
-          >{{dict.dictLabel}}
-          </el-radio>
-        </el-radio-group>
-      </el-form-item>
-    </el-col>
-  </el-row>
-  <el-row>
-    <el-col :span='12'>
-      <el-form-item label='角色'>
-        <el-select v-model='form.roleIds' multiple placeholder='请选择'>
-          <el-option
-            v-for='item in roleOptions'
-            :key='item.roleId'
-            :label='item.roleName'
-            :value='item.roleId'
-            :disabled='item.status == 1'
-          ></el-option>
-        </el-select>
-      </el-form-item>
-    </el-col>
-  </el-row>
-  <el-row>
-    <el-col :span='24'>
-      <el-form-item label='备注'>
-        <el-input v-model='form.remark' type='textarea' placeholder='请输入内容'></el-input>
-      </el-form-item>
-    </el-col>
-  </el-row>
-</el-form>
-<div slot='footer' class='dialog-footer'>
-  <el-button type='primary' @click='submitForm'>确 定</el-button>
-  <el-button @click='cancel'>取 消</el-button>
-</div>
+  <el-form ref='form' :model='form' :rules='rules' label-width='80px'>
+    <el-row>
+      <el-col :span='12'>
+        <el-form-item label='用户昵称' prop='nickName'>
+          <el-input v-model='form.nickName' placeholder='请输入用户昵称' />
+        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span='12'>
+        <el-form-item label='手机号码' prop='phonenumber'>
+          <el-input v-model='form.phonenumber' placeholder='请输入手机号码' maxlength='11' />
+        </el-form-item>
+      </el-col>
+      <el-col :span='12'>
+        <el-form-item label='邮箱' prop='email'>
+          <el-input v-model='form.email' placeholder='请输入邮箱' maxlength='50' />
+        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span='12'>
+        <el-form-item v-if='form.userId == undefined' label='用户名称' prop='userName'>
+          <el-input v-model='form.userName' placeholder='请输入用户名称' />
+        </el-form-item>
+      </el-col>
+      <el-col :span='12'>
+        <el-form-item v-if='form.userId == undefined' label='用户密码' prop='password'>
+          <el-input v-model='form.password' placeholder='请输入用户密码' type='password' />
+        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span='12'>
+        <el-form-item label='用户性别'>
+          <el-select v-model='form.sex' placeholder='请选择'>
+            <el-option
+              v-for='dict in sexOptions'
+              :key='dict.dictValue'
+              :label='dict.dictLabel'
+              :value='dict.dictValue'
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
+      <el-col :span='12'>
+        <el-form-item label='状态'>
+          <el-radio-group v-model='form.status'>
+            <el-radio
+              v-for='dict in statusOptions'
+              :key='dict.dictValue'
+              :label='dict.dictValue'
+            >{{dict.dictLabel}}
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span='12'>
+        <el-form-item label='角色'>
+          <el-select v-model='form.roleIds' multiple placeholder='请选择'>
+            <el-option
+              v-for='item in roleOptions'
+              :key='item.roleId'
+              :label='item.roleName'
+              :value='item.roleId'
+              :disabled='item.status == 1'
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span='24'>
+        <el-form-item label='备注'>
+          <el-input v-model='form.remark' type='textarea' placeholder='请输入内容'></el-input>
+        </el-form-item>
+      </el-col>
+    </el-row>
+  </el-form>
+  <div slot='footer' class='dialog-footer'>
+    <el-button type='primary' @click='submitForm'>确 定</el-button>
+    <el-button @click='cancel'>取 消</el-button>
+  </div>
 </el-dialog>
+```
+
+## 5.表单
+
+### (1). 传统select下拉
+
+```html
+
+<el-select v-model='form.okStatus' placeholder='请选择游戏状态'>
+  <el-option
+    v-for='dict in okStatusOptions'
+    :key='dict.dictValue'
+    :label='dict.dictLabel'
+    :value='parseInt(dict.dictValue)'
+  ></el-option>
+</el-select>
+```
+
+### (2).单选框
+
+```html
+
+<el-form-item label='状态'>
+  <el-radio-group v-model='form.okStatus'>
+    <el-radio
+      v-for='dict in okStatusOptions'
+      :key='dict.dictValue'
+      :label='parseInt(dict.dictValue)'
+    >{{ dict.dictLabel }}
+    </el-radio>
+  </el-radio-group>
+</el-form-item>
+```
+
+### (3). 数字输入框
+
+```html
+
+<el-form-item label='显示排序' prop='orderNum'>
+  <el-input-number v-model='form.orderNum' controls-position='right' :min='0' />
+</el-form-item>
+```
+
+### (4).switch选择
+
+```html
+
+<el-table-column align='center' label='状态' width='100'>
+  <template slot-scope='scope'>
+    <el-switch
+      v-model='scope.row.status'
+      active-value='0'
+      inactive-value='1'
+      @change='handleStatusChange(scope.row)'
+    ></el-switch>
+  </template>
+</el-table-column>
+
+```
+
+handleStatusChange实现
+
+```javascript
+    // 角色状态修改
+function handleStatusChange(row) {
+  let text = row.status === '0' ? '启用' : '停用'
+  this.$confirm('确认要"' + text + '""' + row.roleName + '"角色吗?', '警告', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(function() {
+    return changeRoleStatus(row.roleId, row.status)
+  }).then(() => {
+    this.msgSuccess(text + '成功')
+  }).catch(function() {
+    row.status = row.status === '0' ? '1' : '0'
+  })
+}
 ```
