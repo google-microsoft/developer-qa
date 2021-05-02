@@ -277,3 +277,29 @@ export default {
   },
 }
 ```
+### 3. 上传图片实现
+
+#### 第一种方法,拿框架自带的ImageUpload:
+js上:
+```javascript
+
+import ImageUpload from '@/components/ImageUpload/index.vue'
+export default {
+  name: 'Configurationmanagement_navigation',
+  components: {
+    ImageUpload
+  },
+}
+
+```
+html上
+
+```html
+
+<ImageUpload />
+
+```
+即可
+
+#### 第二种方法:自定义组件
+参考: https://element.eleme.cn/#/zh-CN/component/upload
