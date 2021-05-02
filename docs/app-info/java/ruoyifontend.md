@@ -46,6 +46,7 @@ slug: /app-info/ruoyifontend
 
 ```javascript
 import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 export default {
   name: 'Configurationmanagement_navigation',
@@ -71,6 +72,19 @@ export default {
       configurationmanagement_navigationOptions: [],
     }
   },
+  methods: {
+    /** 转换导航配置数据结构 */
+    normalizer(node) {
+      if (node.children && !node.children.length) {
+        delete node.children
+      }
+      return {
+        id: node.id,
+        label: node.navName,
+        children: node.children
+      }
+    },
+  }
 }
 ```
 
@@ -360,4 +374,59 @@ function handleStatusChange(row) {
     row.status = row.status === '0' ? '1' : '0'
   })
 }
+```
+
+### (5).多选框
+
+```html
+
+<el-form-item label="发布平台" prop="platform">
+  <el-checkbox-group v-model="form.platform">
+    <el-checkbox v-for="dict in platformOptions"
+                 :key="parseInt(dict.dictValue)"
+                 :label="dict.dictLabel"
+    >{{ dict.dictLabel }}
+    </el-checkbox>
+  </el-checkbox-group>
+</el-form-item>
+```
+注意:form.platform一定要给初始化为数组,不然会报错.
+如下:
+```javascript
+ // 表单参数
+      form: {
+        platform:[]
+      }
+还有
+
+// 表单重置
+reset() {
+  this.form = {
+    platform: [],
+  }
+  this.resetForm('form')
+}
+```
+
+### (6).添加富文本框
+
+导入js
+
+```javascript
+import Editor from '@/components/Editor'
+
+export default {
+  name: 'Notice',
+  components: {
+    Editor
+  },
+}
+```
+
+添加html
+
+```html
+
+<editor v-model='form.content' :min-height='192' />
+
 ```
