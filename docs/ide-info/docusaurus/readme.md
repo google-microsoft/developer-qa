@@ -62,4 +62,12 @@ title: introduce
 sidebar_label: introduce
 slug: /
 ---
+
+```
+## 4.git push github失败，提示：SSL_connect: SSL_ERROR_SYSCALL in connection to github.com:443
+
+在shell脚本中加:
+```shell
+git config --global --unset http.proxy
+
 ```
