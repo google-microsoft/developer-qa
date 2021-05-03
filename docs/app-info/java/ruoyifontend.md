@@ -324,7 +324,7 @@ export default {
       v-for='dict in okStatusOptions'
       :key='dict.dictValue'
       :value="dict.dictValue"
-      :label='parseInt(dict.dictValue)'
+      :label='dict.dictValue'
     >{{ dict.dictLabel }}
     </el-radio>
   </el-radio-group>
@@ -384,7 +384,7 @@ function handleStatusChange(row) {
 <el-form-item label="发布平台" prop="platform">
   <el-checkbox-group v-model="form.platform">
     <el-checkbox v-for="dict in platformOptions"
-                 :key="parseInt(dict.dictValue)"
+                 :key="dict.dictValue"
                  :value="dict.dictValue"
                  :label="dict.dictLabel"
     >{{ dict.dictLabel }}
@@ -432,3 +432,4 @@ export default {
 <editor v-model='form.content' :min-height='192' />
 
 ```
+
