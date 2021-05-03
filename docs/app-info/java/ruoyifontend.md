@@ -309,7 +309,7 @@ export default {
     v-for='dict in okStatusOptions'
     :key='dict.dictValue'
     :label='dict.dictLabel'
-    :value='parseInt(dict.dictValue)'
+    :value='dict.dictValue'
   ></el-option>
 </el-select>
 ```
@@ -323,6 +323,7 @@ export default {
     <el-radio
       v-for='dict in okStatusOptions'
       :key='dict.dictValue'
+      :value="dict.dictValue"
       :label='parseInt(dict.dictValue)'
     >{{ dict.dictLabel }}
     </el-radio>
@@ -384,6 +385,7 @@ function handleStatusChange(row) {
   <el-checkbox-group v-model="form.platform">
     <el-checkbox v-for="dict in platformOptions"
                  :key="parseInt(dict.dictValue)"
+                 :value="dict.dictValue"
                  :label="dict.dictLabel"
     >{{ dict.dictLabel }}
     </el-checkbox>
