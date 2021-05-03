@@ -234,3 +234,57 @@ private Date endTime;
 private Date operTime;
 
 ```
+## 5.自定义dto转化器,如,把数组转成String
+
+```java 
+    @Excel(name = "发布对象")
+    @JsonSerialize(using = ArrayToStringJsonSerializer.class)
+    @JsonDeserialize(using = StringJsonDeserializer.class)
+    private String identity;
+
+```
+ArrayToStringJsonSerializer的内容:
+```java 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+
+import java.io.IOException;
+
+/**
+ * ArrayToStringJsonSerializer
+ *
+ * 
+ */
+public class ArrayToStringJsonSerializer extends JsonSerializer<String> {
+
+    @Override
+    public void serialize(String value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+        String text = (value==null ? null:String.valueOf(value));
+        if (text!=null) {
+            jsonGenerator.writeString(text);
+        }
+    }
+}
+```
+StringJsonDeserializer的内容:
+
+```java 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+
+import java.io.IOException;
+
+/**
+ * StringJsonDeserializer
+ */
+public class StringJsonDeserializer extends JsonDeserializer<String> {
+
+    @Override
+    public String deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+        return jsonParser.getText();
+    }
+}
+```
+
