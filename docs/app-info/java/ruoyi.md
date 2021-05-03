@@ -221,7 +221,9 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
 ## 4.字段日期格式化
 
 ```shell
- 
+ import com.fasterxml.jackson.annotation.JsonFormat;
+
+
 @JsonFormat(pattern = "yyyy-MM-dd")
 private Date endTime;
 
