@@ -288,3 +288,19 @@ public class StringJsonDeserializer extends JsonDeserializer<String> {
 }
 ```
 
+## 6.常见mybatis实体html
+````html
+
+<if test="createTime != null "> and CREATE_TIME &gt;= #{createTime}</if>
+<if test="updateTime != null "> and CREATE_TIME &lt;= #{updateTime}</if>
+
+
+<:的实体标签:
+&lt;
+>:的实体标签:
+&gt;
+
+<>的实体标签:
+&lt;&gt;
+
+````
