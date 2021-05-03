@@ -218,3 +218,17 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
 
 ## 3.在ruoyi-vue加谷歌验证码
 
+## 4.字段日期格式化
+
+```shell
+ 
+@JsonFormat(pattern = "yyyy-MM-dd")
+private Date endTime;
+
+
+带时分秒的:
+
+@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+private Date operTime;
+
+```
