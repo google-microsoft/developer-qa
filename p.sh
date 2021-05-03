@@ -1,10 +1,13 @@
+
 git add .
 git commit -m "update"
 git push
 
+git config --global --unset http.proxy
+
 DEPLOYMENT_BRANCH=gh-pages
 
-git config --global --unset http.proxy
+
 
 yarn deploy
 
