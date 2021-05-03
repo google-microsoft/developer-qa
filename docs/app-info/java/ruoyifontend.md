@@ -385,14 +385,14 @@ function handleStatusChange(row) {
   <el-checkbox-group v-model="form.platform">
     <el-checkbox v-for="dict in platformOptions"
                  :key="dict.dictValue"
-                 :value="dict.dictValue"
-                 :label="dict.dictLabel"
+                 :label="dict.dictValue"
     >{{ dict.dictLabel }}
     </el-checkbox>
   </el-checkbox-group>
 </el-form-item>
 ```
-注意:form.platform一定要给初始化为数组,不然会报错.
+注意:
+[1] form.platform一定要给初始化为数组,不然会报错.
 如下:
 ```javascript
  // 表单参数
@@ -409,6 +409,7 @@ reset() {
   this.resetForm('form')
 }
 ```
+[2] el-checkbox比较特殊,  :label="dict.dictValue"就是提交的值
 
 ### (6).添加富文本框
 
