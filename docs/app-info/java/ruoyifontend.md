@@ -437,7 +437,7 @@ export default {
 
 ```
 
-6. 动态表单的使用,实现tab动态组件
+## 6. 动态表单的使用,实现tab动态组件
 
 [1] 导入组件到components
 [2] 通过component渲染组件
