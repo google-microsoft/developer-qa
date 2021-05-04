@@ -52,6 +52,7 @@ eeooff
 server.sh 内容:
 
 ```shell
+
 project=test-admin
 
 cd /home/work/project/server
@@ -77,6 +78,7 @@ echo $! > /home/work/server/pid
 记得加绝对路径比较好.因为有时不知道它相对什么路径打印了
 
 ```java
+
 try {
 	System.setOut(new PrintStream("/Users/richard/WebstormProjects/develop-QA/tmp.md"));
 	System.out.println(sql);
