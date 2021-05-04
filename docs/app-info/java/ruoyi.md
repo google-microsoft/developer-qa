@@ -234,6 +234,7 @@ private Date endTime;
 private Date operTime;
 
 ```
+
 ## 5.自定义dto转化器,如,把数组转成String
 
 ```java 
@@ -243,7 +244,9 @@ private Date operTime;
     private String identity;
 
 ```
+
 ArrayToStringJsonSerializer的内容:
+
 ```java 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -267,6 +270,7 @@ public class ArrayToStringJsonSerializer extends JsonSerializer<String> {
     }
 }
 ```
+
 StringJsonDeserializer的内容:
 
 ```java 
@@ -289,21 +293,148 @@ public class StringJsonDeserializer extends JsonDeserializer<String> {
 ```
 
 ## 6.常见mybatis实体html
-````html
 
-<if test="createTime != null "> and CREATE_TIME &gt;= #{createTime}</if>
-<if test="updateTime != null "> and CREATE_TIME &lt;= #{updateTime}</if>
+```html
+
+<if test='createTime != null '> and CREATE_TIME &gt;= #{createTime}</if>
+<if test='updateTime != null '> and CREATE_TIME &lt;= #{updateTime}</if>
 
 
 <:的实体标签:
-&lt;
+  &lt;
 >:的实体标签:
-&gt;
+  &gt;
 
-<>的实体标签:
-&lt;&gt;
+  <>的实体标签:
+  &lt;&gt;
 
-````
+```
 
 ## 7. import导入的实现
 
+### (1) java 实现
+
+```typescript jsx 
+
+    @Log(title = "导入数据", businessType = BusinessType.IMPORT)
+    @PreAuthorize("@ss.hasPermi('chessandcardchallenge:dataimport:import')")
+    @PostMapping("/importData")
+    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
+        ExcelUtil<MacauChesscardchallengeDataimport> util = new ExcelUtil<>(MacauChesscardchallengeDataimport.class);
+        List<MacauChesscardchallengeDataimport> userList = util.importExcel(file.getInputStream());
+        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+        String operName = loginUser.getUsername();
+        String message = macauChesscardchallengeDataimportService.importUser(userList, updateSupport, operName);
+        return AjaxResult.success(message);
+    }
+    
+    @GetMapping("/importTemplate")
+    public AjaxResult importTemplate() {
+        ExcelUtil<MacauChesscardchallengeDataimport> util = new ExcelUtil<>(MacauChesscardchallengeDataimport.class);
+        return util.importTemplateExcel("导入数据");
+    }
+
+```
+
+### (2) vue实现
+
+```html
+
+<template>
+  <!-- 用户导入对话框 -->
+  <el-dialog :title='upload.title' :visible.sync='upload.open' width='400px' append-to-body>
+    <el-upload
+      ref='upload'
+      :limit='1'
+      accept='.xlsx, .xls'
+      :headers='upload.headers'
+      :action="upload.url + '?updateSupport=' + upload.updateSupport"
+      :disabled='upload.isUploading'
+      :on-progress='handleFileUploadProgress'
+      :on-success='handleFileSuccess'
+      :auto-upload='false'
+      drag
+    >
+      <i class='el-icon-upload'></i>
+      <div class='el-upload__text'>
+        将文件拖到此处，或
+        <em>点击上传</em>
+      </div>
+      <div class='el-upload__tip' slot='tip'>
+        <el-checkbox v-model='upload.updateSupport' />
+        是否更新已经存在的用户数据
+        <el-link type='info' style='font-size:12px' @click='importTemplate'>下载模板</el-link>
+      </div>
+      <div class='el-upload__tip' style='color:red' slot='tip'>提示：仅允许导入“xls”或“xlsx”格式文件！</div>
+    </el-upload>
+    <div slot='footer' class='dialog-footer'>
+      <el-button type='primary' @click='submitFileForm'>确 定</el-button>
+      <el-button @click='upload.open = false'>取 消</el-button>
+    </div>
+  </el-dialog>
+</template>
+
+<script>
+import {getToken} from "@/utils/auth";
+// 下载用户导入模板
+function importTemplate() {
+  return request({
+    url: '/chessandcardchallenge/dataimport/importTemplate',
+    method: 'get'
+  })
+}
+
+export default {
+  name: "Dataimport",
+  components: {},
+  data() {
+    return {
+      upload: {
+        // 是否显示弹出层（数据导入）
+        open: false,
+        // 弹出层标题（数据导入）
+        title: "",
+        // 是否禁用上传
+        isUploading: false,
+        // 是否更新已经存在的数据数据
+        updateSupport: 0,
+        // 设置上传的请求头部
+        headers: {Authorization: "Bearer " + getToken()},
+        // 上传的地址
+        url: process.env.VUE_APP_BASE_API + "/chessandcardchallenge/dataimport/importData"
+      },
+    };
+  },
+  methods: {
+    /** 下载模板操作 */
+    importTemplate() {
+      importTemplate().then(response => {
+        this.download(response.msg);
+      });
+    },
+    // 提交上传文件
+    submitFileForm() {
+      this.$refs.upload.submit();
+    },
+    /** 导入按钮操作 */
+    handleImport() {
+      this.upload.title = "数据导入";
+      this.upload.open = true;
+    },
+    // 文件上传中处理
+    handleFileUploadProgress(event, file, fileList) {
+      this.upload.isUploading = true;
+    },
+    // 文件上传成功处理
+    handleFileSuccess(response, file, fileList) {
+      this.upload.open = false;
+      this.upload.isUploading = false;
+      this.$refs.upload.clearFiles();
+      this.$alert(response.msg, "导入结果", {dangerouslyUseHTMLString: true});
+      this.getList();
+    },
+  }
+};
+</script>
+
+```
