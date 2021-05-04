@@ -323,7 +323,7 @@ export default {
     <el-radio
       v-for='dict in okStatusOptions'
       :key='dict.dictValue'
-      :value="dict.dictValue"
+      :value='dict.dictValue'
       :label='dict.dictValue'
     >{{ dict.dictLabel }}
     </el-radio>
@@ -381,34 +381,37 @@ function handleStatusChange(row) {
 
 ```html
 
-<el-form-item label="发布平台" prop="platform">
-  <el-checkbox-group v-model="form.platform">
-    <el-checkbox v-for="dict in platformOptions"
-                 :key="dict.dictValue"
-                 :label="dict.dictValue"
+<el-form-item label='发布平台' prop='platform'>
+  <el-checkbox-group v-model='form.platform'>
+    <el-checkbox v-for='dict in platformOptions'
+                 :key='dict.dictValue'
+                 :label='dict.dictValue'
     >{{ dict.dictLabel }}
     </el-checkbox>
   </el-checkbox-group>
 </el-form-item>
 ```
+
 注意:
-[1] form.platform一定要给初始化为数组,不然会报错.
-如下:
+[1] form.platform一定要给初始化为数组,不然会报错. 如下:
+
 ```javascript
  // 表单参数
-      form: {
-        platform:[]
-      }
+form: {
+  platform:[]
+}
 还有
 
 // 表单重置
-reset() {
+reset()
+{
   this.form = {
     platform: [],
   }
   this.resetForm('form')
 }
 ```
+
 [2] el-checkbox比较特殊,  :label="dict.dictValue"就是提交的值
 
 ### (6).添加富文本框
@@ -434,3 +437,45 @@ export default {
 
 ```
 
+6. 动态表单的使用,实现tab动态组件
+
+[1] 导入组件到components
+[2] 通过component渲染组件
+
+```vue
+
+<template>
+  <div id='agent_manager' class='app-container'>
+    <el-tabs v-model='currentTabComponent'>
+      <el-tab-pane v-for='v in tagInfo' :label='v.label' :name='v.name'></el-tab-pane>
+    </el-tabs>
+    <component v-bind:is='currentTabComponent'></component>
+  </div>
+</template>
+
+<script>
+import checkAwait from './checkAwait'
+import checkSuccess from './checkSuccess'
+import checkError from './checkError'
+
+export default {
+  name: 'agent_manager',
+  data() {
+    return {
+      tagInfo: [
+        {label: '待审核列表', name: 'checkAwait'},
+        {label: '审核通过', name: 'checkSuccess'},
+        {label: '审核失败', name: 'checkError'}
+      ],
+      currentTabComponent: 'checkAwait'
+    }
+  },
+  components: {
+    checkAwait,
+    checkSuccess,
+    checkError
+  },
+}
+</script>
+
+```
