@@ -438,3 +438,114 @@ export default {
 </script>
 
 ```
+
+## 8.ruoyi多数据源
+
+[参考:]: http://doc.ruoyi.vip/ruoyi/document/htsc.html#%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90
+
+在实际开发中，经常可能遇到在一个应用中可能需要访问多个数据库的情况
+在需要切换数据源`Service`或`Mapper`方法上添加`@DataSource`注解
+`@DataSource(value = DataSourceType.MASTER)`，其中`value`用来表示数据源名称
+
+提示
+
+关于多数据源使用流程（如果有多个，可以参考slave添加）
+
+支持参数如下：
+
+| 参数  | 类型           | 默认值                | 描述 |
+| ----- | -------------- | --------------------- | ---- |
+| value | DataSourceType | DataSourceType.MASTER | 主库 |
+
+1、在`application-druid.yml`配置从库数据源
+
+```yaml
+# 从库数据源
+slave:
+	# 从数据源开关/默认关闭
+	enabled: true
+	url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+	username: root
+	password: password
+```
+
+2、在`DataSourceType`类添加数据源枚举
+
+```javascript
+/**
+ * 从库
+ */
+SLAVE
+```
+
+
+
+3、在`DruidConfig`配置读取数据源
+
+```javascript
+@Bean
+@ConfigurationProperties("spring.datasource.druid.slave")
+@ConditionalOnProperty(prefix = "spring.datasource.druid.slave", name = "enabled", havingValue = "true")
+public DataSource slaveDataSource(DruidProperties druidProperties)
+{
+	DruidDataSource dataSource = DruidDataSourceBuilder.create().build();
+	return druidProperties.dataSource(dataSource);
+}
+```
+
+
+
+4、在`DruidConfig`类`dataSource`方法添加数据源
+
+```javascript
+setDataSource(targetDataSources, DataSourceType.SLAVE.name(), "slaveDataSource");
+```
+
+5、在需要使用多数据源方法或类上添加`@DataSource`注解，其中`value`用来表示数据源
+
+
+
+```javascript
+@DataSource(value = DataSourceType.SLAVE)
+public List<SysUser> selectUserList(SysUser user)
+{
+	return userMapper.selectUserList(user);
+}
+```
+
+
+
+
+
+```javascript
+@Service
+@DataSource(value = DataSourceType.SLAVE)
+public class SysUserServiceImpl
+```
+
+
+
+对于特殊情况可以通过`DynamicDataSourceContextHolder`手动实现数据源切换
+
+```javascript
+public List<SysUser> selectUserList(SysUser user)
+{
+	DynamicDataSourceContextHolder.setDataSourceType(DataSourceType.SLAVE.name());
+	List<SysUser> userList = userMapper.selectUserList(user);
+	DynamicDataSourceContextHolder.clearDataSourceType();
+	return userList;
+}
+```
+
+
+
+逻辑实现代码 `com.ruoyi.framework.aspectj.DataSourceAspect`
+
+```javascript
+注意：目前配置了一个从库，默认关闭状态。如果不需要多数据源不用做任何配置。 另外可新增多个从库。支持不同数据源（Mysql、Oracle、SQLServer）
+```
+
+提示
+
+如果有Service方法内多个注解无效的情况使用内部方法调用
+SpringUtils.getAopProxy(this).xxxxxx(xxxx);
