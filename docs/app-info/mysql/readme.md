@@ -109,7 +109,7 @@ mysql -u root -p  ry-vue < sql/all.sql
 
 ```
 
-## 6. 自动输入msyql密码:
+## 2. 自动输入msyql密码:
 ### 第一种方法:
 ```shell
 #!/usr/bin/env bash
@@ -157,3 +157,45 @@ mysqldump -u root -p ry-vue > sql/all.sql
 mysql -u root -p  ry-vue < sql/all.sql
 
 ```
+
+## 3. docker上部署并远程访问mysql
+
+### (1) docker-compose配置:
+
+```yaml
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+version: '3.8'
+services:
+  e2edemo-mysql:
+    image: mysql:8.0.23
+    volumes:
+     - ~/volumes/jhipster/e2edemo/mysql/:/var/lib/mysql/
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 3306:3306
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+```
+### (2) 设置远程访问
+
+```shell
+
+进入容器:
+
+docker exec -it app_e2edemo-mysql_1 bash
+
+登陆 mysql 
+mysql -uroot -p
+
+alter user 'root'@'%' identified with mysql_native_password by 'your-password';
+
+flush privileges;
+
+记得退出容器,即可
+
+```
+
+
+
