@@ -437,6 +437,53 @@ export default {
 
 ```
 
+### (6).日期范围
+
+html:
+
+```html
+
+<el-form-item label='日期范围' prop='field101'>
+  <el-date-picker type='daterange' v-model='formData.timeRange' format='yyyy-MM-dd'
+                  value-format='yyyy-MM-dd' :style="{width: '100%'}" start-placeholder='开始日期' end-placeholder='结束日期'
+                  range-separator='至' clearable></el-date-picker>
+</el-form-item>
+```
+
+js
+
+```javascript
+
+export default {
+  data() {
+    return {
+      formData: {
+        timeRange: [],
+      },
+      rules: {
+        timeRange: [{
+          required: true,
+          message: '日期范围不能为空',
+          trigger: 'change'
+        }],
+      },
+    }
+  },
+  methods: {
+    getList() {
+      let [beginTime, endTime] = this.formData.timeRange;
+      if (beginTime && endTime) {
+        this.queryParams.createdAt = beginTime;
+        this.queryParams.updatedAt = endTime;
+      }
+      list_record(this.queryParams).then(response => {
+      });
+    }
+  }
+}
+
+```
+
 ## 6. 动态表单的使用,实现tab动态组件
 
 [1] 导入组件到components
