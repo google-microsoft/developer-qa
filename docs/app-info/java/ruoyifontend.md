@@ -484,6 +484,30 @@ export default {
 
 ```
 
+### (7). 日期和带时分秒的日期
+
+```html
+
+<el-form-item label='开始时间' prop='startTime'>
+  <el-date-picker clearable size='small'
+                  v-model='queryParams.startTime'
+                  type='date'
+                  value-format='yyyy-MM-dd'
+                  placeholder='选择开始时间'>
+  </el-date-picker>
+</el-form-item>
+
+<el-form-item label='开始时间' prop='startTime'>
+  <el-date-picker clearable size='small'
+                  v-model='queryParams.startTime'
+                  type='datetime'
+                  value-format='yyyy-MM-dd HH:mm:ss'
+                  placeholder='选择开始时间'>
+  </el-date-picker>
+</el-form-item>
+
+```
+
 ## 6. 动态表单的使用,实现tab动态组件
 
 [1] 导入组件到components
