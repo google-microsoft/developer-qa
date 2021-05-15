@@ -470,6 +470,12 @@ export default {
     }
   },
   methods: {
+    /** 重置按钮操作 */
+    resetQuery() {
+      this.resetForm("queryForm");
+      this.formData.timeRange = [];
+      this.handleQuery();
+    },
     getList() {
       let [beginTime, endTime] = this.formData.timeRange;
       if (beginTime && endTime) {
