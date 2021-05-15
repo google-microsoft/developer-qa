@@ -155,6 +155,21 @@ mysql -u root -p  ry-vue < sql/all.sql
 bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 ```
 
+// 只更新 .dat 資料檔
+```shell
+
+ bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
+ 
+```
+
+移除 V2Ray
+```shell
+
+bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove
+
+```
+
+
 结果如下:
 
 ```shell
@@ -403,6 +418,10 @@ systemctl stop v2ray.service
 ```
 
 ### 客户端下载
+
+ShadowsocksX-NG.1.9.4.zip
+
+https://github-releases.githubusercontent.com/60844036/38762500-0a36-11ea-9005-6dbb85ecde70?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20210515%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210515T055457Z&X-Amz-Expires=300&X-Amz-Signature=45429c9490b30476789831764de0af097513ab4808d42f352aca8d0e060affba&X-Amz-SignedHeaders=host&actor_id=4687708&key_id=0&repo_id=60844036&response-content-disposition=attachment%3B%20filename%3DShadowsocksX-NG.1.9.4.zip&response-content-type=application%2Foctet-stream
 
 参考:https://www.v2ray.com/en/awesome/tools.html
 
