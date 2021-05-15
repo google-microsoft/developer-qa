@@ -340,7 +340,22 @@ public class StringJsonDeserializer extends JsonDeserializer<String> {
 
 ```html
 
+
 <template>
+
+  <el-col :span="1.5">
+    <el-button
+      type="info"
+      plain
+      icon="el-icon-upload2"
+      size="mini"
+      @click="handleImport"
+      v-hasPermi="['chessandcardchallenge:dataimport:import']"
+    >导入
+    </el-button>
+  </el-col>
+  
+  
   <!-- 用户导入对话框 -->
   <el-dialog :title='upload.title' :visible.sync='upload.open' width='400px' append-to-body>
     <el-upload
