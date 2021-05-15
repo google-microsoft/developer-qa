@@ -90,3 +90,15 @@ try {
 System.setOut(new PrintStream(new FileOutputStream("Users/richard/WebstormProjects/develop-QA/tmp.md", true)));
 
 ```
+## 6.springboot启动时指定配置文件参数:
+```shell
+
+-Dspring.profiles.active=dev
+
+如:
+
+java -jar -Dfile.encoding=UTF-8 -Dspring.profiles.active=dev admin.jar > /home/work/server/log 2>&1 &
+
+
+```
+
