@@ -12,8 +12,8 @@ cat /etc/centos-release
 
 ```
 
-## 2.防火墙开启和关闭
-
+## 2.防火墙
+### (1). 开启和关闭
 通过
 ``` 
 systemctl status firewalld
@@ -33,8 +33,16 @@ systemctl start firewalld
 systemctl stop firewalld
 ```
 
+### (2). linux的ip加白命令:
+```shell
 
-## 3.centos7打开,关闭3306端口
+firewall-cmd  --zone=trusted --add-source=185.888.8.8
+firewall-cmd  --zone=trusted --add-source=185.888.8.8  --permanent
+
+```
+
+
+### (3) 打开,关闭端口
 
 ```
 firewall-cmd --zone=public --add-port=3306/tcp --permanent
@@ -87,9 +95,11 @@ redis-server --port 6380 &
 一台Redis服务器，分成多个节点，每个节点分配一个端口（6380，6381…），默认端口是6379。
 每个节点对应一个Redis配置文件，如： redis6380.conf、redis6381.conf
 
-### cp redis.confredis6380.conf
+#### cp redis.confredis6380.conf
 
-### vi redis6380.conf
+#### vi redis6380.conf
+
+```shell
 
 pidfile : pidfile/var/run/redis/redis_6380.pid
 
@@ -98,6 +108,8 @@ port 6380
 logfile : logfile/var/log/redis/redis_6380.log
 
 rdbfile : dbfilenamedump_6380.rdb
+
+```
 
 ## 5. 自动输入密码:
  在这之前要有expect 如果没有请如下安装expect
@@ -439,11 +451,4 @@ https://github.com/yanue/V2rayU/releases
 i2Ray
 ```
 
-## 7. linux的ip加白命令:
-```shell
-
-firewall-cmd  --zone=trusted --add-source=185.888.8.8
-firewall-cmd  --zone=trusted --add-source=185.888.8.8  --permanent
-
-```
 
