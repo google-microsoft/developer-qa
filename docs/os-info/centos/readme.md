@@ -87,9 +87,9 @@ redis-server --port 6380 &
 一台Redis服务器，分成多个节点，每个节点分配一个端口（6380，6381…），默认端口是6379。
 每个节点对应一个Redis配置文件，如： redis6380.conf、redis6381.conf
 
-#cp redis.confredis6380.conf
+### cp redis.confredis6380.conf
 
-#vi redis6380.conf
+### vi redis6380.conf
 
 pidfile : pidfile/var/run/redis/redis_6380.pid
 
@@ -439,5 +439,11 @@ https://github.com/yanue/V2rayU/releases
 i2Ray
 ```
 
+## 7. linux的ip加白命令:
+```shell
 
+firewall-cmd  --zone=trusted --add-source=52.184.23.191
+firewall-cmd  --zone=trusted --add-source=52.184.23.191  --permanent
+
+```
 
