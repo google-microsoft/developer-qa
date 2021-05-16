@@ -442,8 +442,8 @@ i2Ray
 ## 7. linux的ip加白命令:
 ```shell
 
-firewall-cmd  --zone=trusted --add-source=52.184.23.191
-firewall-cmd  --zone=trusted --add-source=52.184.23.191  --permanent
+firewall-cmd  --zone=trusted --add-source=185.888.8.8
+firewall-cmd  --zone=trusted --add-source=185.888.8.8  --permanent
 
 ```
 
