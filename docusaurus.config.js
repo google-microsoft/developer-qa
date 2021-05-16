@@ -34,6 +34,7 @@ module.exports = {
           items: [
             {to: 'docs/os-info/centos', label: 'Centos'},
             {to: 'docs/os-info/ubuntu', label: 'ubuntu'},
+            {to: 'docs/os-info/docker', label: 'docker'},
           ],
         },
         {
