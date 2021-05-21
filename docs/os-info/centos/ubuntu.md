@@ -98,3 +98,31 @@ sudo /etc/init.d/ssh restart
 systemctl restart sshd.service
 
 ```
+
+## 7.升级git到最新版本
+```shell
+apt install software-properties-common -y
+add-apt-repository -y ppa:git-core/ppa
+apt-get update
+apt-get install git -y
+
+# centos:
+
+yum install git
+
+
+```
+## 8. 查询在linux包含某个字符的文件:
+
+```shell
+
+grep -iRl "/usr/share/nginx" /
+
+
+Here are the switches:
+-i - ignore text case
+-R - recursively search files in subdirectories.
+-l - show file names instead of file contents portions.
+
+./ - the last parameter is the path to the folder containing files you need to search for your text. In our case, it is the current folder with the file mask. You can change it to the full path of the folder. For example, here is my command
+```
