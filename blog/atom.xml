@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://google-microsoft.github.io/developer-QA/blog</id>
+    <id>https://google-microsoft.github.io/developer-qa/blog</id>
     <title>程序员常见问题解答 Blog</title>
     <updated>2015-10-25T23:29:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://google-microsoft.github.io/developer-QA/blog"/>
+    <link rel="alternate" href="https://google-microsoft.github.io/developer-qa/blog"/>
     <subtitle>程序员常见问题解答 Blog</subtitle>
-    <icon>https://google-microsoft.github.io/developer-QA/img/favicon.ico</icon>
+    <icon>https://google-microsoft.github.io/developer-qa/img/favicon.ico</icon>
 </feed>

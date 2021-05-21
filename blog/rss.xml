@@ -2,7 +2,7 @@
 <rss version="2.0">
     <channel>
         <title>程序员常见问题解答 Blog</title>
-        <link>https://google-microsoft.github.io/developer-QA/blog</link>
+        <link>https://google-microsoft.github.io/developer-qa/blog</link>
         <description>程序员常见问题解答 Blog</description>
         <lastBuildDate>Sun, 25 Oct 2015 23:29:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
