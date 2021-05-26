@@ -267,7 +267,7 @@ public class GoogleAuthCodeException extends UserException {
 ##### GoogleAuthenticator
 
 ```javascript
-package com.tao.common.utils;
+package com.ruoyi.common.utils;
 
 import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.codec.binary.Hex;
@@ -350,11 +350,11 @@ public class GoogleAuthenticator {
 ##### GoogleCodeService
 ```javascript
 
-package com.tao.framework.web.service;
+package com.ruoyi.framework.web.service;
 
-import com.tao.common.core.domain.entity.SysUser;
-import com.tao.common.exception.user.GoogleAuthCodeException;
-import com.tao.common.utils.GoogleAuthenticator;
+import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.exception.user.GoogleAuthCodeException;
+import com.ruoyi.common.utils.GoogleAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -387,7 +387,7 @@ public class GoogleCodeService {
 ```
 ##### TOTP
 ```javascript
-package com.tao.common.utils;
+package com.ruoyi.common.utils;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -666,7 +666,7 @@ public AjaxResult login(@RequestBody LoginBody loginBody) {
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.tao.system.mapper.SysUserMapper">
+<mapper namespace="com.ruoyi.system.mapper.SysUserMapper">
 
     <resultMap type="SysUser" id="SysUserResult">
         <id property="userId" column="user_id"/>
