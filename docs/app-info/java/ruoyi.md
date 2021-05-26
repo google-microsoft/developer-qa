@@ -217,6 +217,777 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
 ```
 
 ## 3.在ruoyi-vue加谷歌验证码
+### (1).后端的添加
+
+#### 一. application.yml 添加
+
+```yaml
+# token配置
+token:
+  # 是否启动google身份验证
+  googleAuthenticator: true
+```
+
+#### 二. CaptchaController 添加
+```javascript
+
+    @Autowired
+    private TokenService tokenService;
+    
+      /**
+     * 生成验证码
+     */
+    @GetMapping("/isEnabledGoogleAuth")
+    public AjaxResult isEnabledGoogleAuth()  {
+        var ajax = AjaxResult.success();
+        ajax.put("isGoogleAuthenticatorEnabled", tokenService.isGoogleAuthenticator());
+        return ajax;
+    }
+
+```
+#### 三. 创建几个新类
+
+##### GoogleAuthCodeException
+
+```javascript
+
+package com.ruoyi.common.exception.user;
+
+/**
+ * GoogleAuthCodeException
+ */
+public class GoogleAuthCodeException extends UserException {
+    public GoogleAuthCodeException() {
+        super("user.google.not.match", null);
+    }
+}
+
+```
+
+##### GoogleAuthenticator
+
+```javascript
+package com.tao.common.utils;
+
+import org.apache.commons.codec.binary.Base32;
+import org.apache.commons.codec.binary.Hex;
+
+import java.security.SecureRandom;
+
+/**
+ * GoogleAuthenticator
+ */
+public class GoogleAuthenticator {
+    /**
+     * 必须:创建谷歌秘钥
+     *
+     * @return
+     */
+    public static String generateSecretKey() {
+        SecureRandom random = new SecureRandom();
+        byte[] bytes = new byte[10];
+        random.nextBytes(bytes);
+        Base32 base32 = new Base32();
+        return base32.encodeToString(bytes);
+    }
+
+    /**
+     * 生成6位数密码跟前端匹配
+     *
+     * @param secretKey
+     * @return
+     */
+    public static String getTOTPCode(String secretKey) {
+        Base32 base32 = new Base32();
+        byte[] bytes = base32.decode(secretKey);
+        String hexKey = Hex.encodeHexString(bytes);
+        return TOTP.getOTP(hexKey);
+    }
+
+    /**
+     * 生成6位数密码跟前端匹配
+     * @param date
+     * @param secretKey
+     * @return
+     */
+    public static String getTOTPCode(String date,String secretKey) {
+        long cNowTime= DateUtils.dateTime(DateUtils.YYYY_MM_DD_HH_MM_SS,date).getTime()/30000;
+        Base32 base32 = new Base32();
+        byte[] bytes = base32.decode(secretKey);
+        String hexKey = Hex.encodeHexString(bytes);
+        return TOTP.getOTP(cNowTime,hexKey);
+    }
+
+    /**
+     * 生成6位数密码跟前端匹配
+     * @param date
+     * @param secretKey
+     * @return
+     */
+    public static String getTOTPCode(long date,String secretKey) {
+        long cNowTime= date/30000;
+        Base32 base32 = new Base32();
+        byte[] bytes = base32.decode(secretKey);
+        String hexKey = Hex.encodeHexString(bytes);
+        return TOTP.getOTP(cNowTime,hexKey);
+    }
+    /**
+     * 只要秘钥一样.生成的6位数就是一样的.  配合前端谷歌身份证器测试一下
+     * @param args
+     */
+    public static void main(String[] args) {
+        String secretKey = generateSecretKey();
+        String totpCode = getTOTPCode(secretKey);
+        System.out.println(totpCode);
+        //       String secretKey = "FIFAMOCVMDAMQNL525FU66JJIEKBKY6V";
+//        String code = getTOTPCode(secretKey);
+        System.out.println(secretKey);
+    }
+}
+
+
+```
+##### GoogleCodeService
+```javascript
+
+package com.tao.framework.web.service;
+
+import com.tao.common.core.domain.entity.SysUser;
+import com.tao.common.exception.user.GoogleAuthCodeException;
+import com.tao.common.utils.GoogleAuthenticator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ * GoogleCodeService
+ */
+@Service
+public class GoogleCodeService {
+    @Autowired
+    private HttpServletRequest request;
+
+    public void verifyGooglecode(SysUser user, String googlecode) throws GoogleAuthCodeException {
+        String value = request.getHeader("clientimestamp");
+        String totpCode = null;
+        if (null != value) {
+            totpCode = GoogleAuthenticator.getTOTPCode(Long.parseLong(value), user.getGooglekey());
+        } else {
+            totpCode = GoogleAuthenticator.getTOTPCode(user.getGooglekey());
+        }
+        if (org.springframework.util.StringUtils.isEmpty(googlecode) || !googlecode.equals(totpCode)) {
+            throw new GoogleAuthCodeException();
+        }
+    }
+
+}
+
+
+```
+##### TOTP
+```javascript
+package com.tao.common.utils;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.lang.reflect.UndeclaredThrowableException;
+import java.math.BigInteger;
+import java.security.GeneralSecurityException;
+
+/**
+ * Implementation of TOTP: Time-based One-time Password Algorithm
+ *
+ * @author thoeger
+ */
+public final class TOTP {
+
+    private TOTP() {
+        // private utility class constructor
+    }
+
+    /**
+     * @param key - secret credential key (HEX)
+     * @return the OTP
+     */
+    public static String getOTP(String key) {
+        return TOTP.getOTP(TOTP.getStep(), key);
+    }
+
+    /**
+     * @param key - secret credential key (HEX)
+     * @param otp - OTP to validate
+     * @return valid?
+     */
+    public static boolean validate(final String key, final String otp) {
+        return TOTP.validate(TOTP.getStep(), key, otp);
+    }
+
+    private static boolean validate(final long step, final String key, final String otp) {
+        return TOTP.getOTP(step, key).equals(otp) || TOTP.getOTP(step - 1, key).equals(otp);
+    }
+
+    private static long getStep() {
+        // 30 seconds StepSize (ID TOTP)
+        return System.currentTimeMillis() / 30000;
+    }
+
+    public static String getOTP(final long step, final String key) {
+        String steps = Long.toHexString(step).toUpperCase();
+        while (steps.length() < 16) {
+            steps = "0" + steps;
+        }
+
+        // Get the HEX in a Byte[]
+        final byte[] msg = TOTP.hexStr2Bytes(steps);
+        final byte[] k = TOTP.hexStr2Bytes(key);
+
+        final byte[] hash = TOTP.hmac_sha1(k, msg);
+
+        // put selected bytes into result int
+        final int offset = hash[hash.length - 1] & 0xf;
+        final int binary = ((hash[offset] & 0x7f) << 24) | ((hash[offset + 1] & 0xff) << 16) | ((hash[offset + 2] & 0xff) << 8) | (hash[offset + 3] & 0xff);
+        final int otp = binary % 1000000;
+
+        String result = Integer.toString(otp);
+        while (result.length() < 6) {
+            result = "0" + result;
+        }
+        return result;
+    }
+
+    /**
+     * This method converts HEX string to Byte[]
+     *
+     * @param hex the HEX string
+     *
+     * @return A byte array
+     */
+    private static byte[] hexStr2Bytes(final String hex) {
+        // Adding one byte to get the right conversion
+        // values starting with "0" can be converted
+        final byte[] bArray = new BigInteger("10" + hex, 16).toByteArray();
+        final byte[] ret = new byte[bArray.length - 1];
+
+        // Copy all the REAL bytes, not the "first"
+        System.arraycopy(bArray, 1, ret, 0, ret.length);
+        return ret;
+    }
+
+    /**
+     * This method uses the JCE to provide the crypto algorithm. HMAC computes a Hashed Message Authentication Code with the crypto hash
+     * algorithm as a parameter.
+     *
+     * @param keyBytes the bytes to use for the HMAC key
+     * @param text the message or text to be authenticated.
+     */
+    private static byte[] hmac_sha1(final byte[] keyBytes, final byte[] text) {
+        try {
+            final Mac hmac = Mac.getInstance("HmacSHA1");
+            final SecretKeySpec macKey = new SecretKeySpec(keyBytes, "RAW");
+            hmac.init(macKey);
+            return hmac.doFinal(text);
+        } catch (final GeneralSecurityException gse) {
+            throw new UndeclaredThrowableException(gse);
+        }
+    }
+
+}
+
+
+```
+#### 四. 添加新字段
+
+##### LoginBody
+
+```javascript
+import lombok.Data;
+
+@Data
+public class LoginBody {
+  private String googlecode;
+}
+```
+##### messages.properties添加翻译
+
+```text
+user.google.not.match=googlecode校验失败
+```
+##### SecurityConfig 添加配置
+
+```javascript
+
+.authorizeRequests.antMatchers("/login", "/captchaImage","/isEnabledGoogleAuth").anonymous()
+
+```
+##### sql添加字段
+
+```sql
+googlekey   VARCHAR(32)  DEFAULT '' COMMENT 'googlekey',
+
+添加插入
+
+'SWYKZ6EJWR3Y5XVHX5HZEHJJEEK7HIQZ'
+
+```
+
+```sql
+-- ----------------------------
+-- 2、用户信息表
+-- ----------------------------
+DROP TABLE IF EXISTS sys_user;
+CREATE TABLE sys_user
+(
+    user_id     BIGINT(20)  NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+    user_name   VARCHAR(30) NOT NULL COMMENT '用户账号',
+    nick_name   VARCHAR(30) NOT NULL COMMENT '用户昵称',
+    user_type   VARCHAR(2)   DEFAULT '00' COMMENT '用户类型（00系统用户）',
+    email       VARCHAR(50)  DEFAULT '' COMMENT '用户邮箱',
+    phonenumber VARCHAR(11)  DEFAULT '' COMMENT '手机号码',
+    googlekey   VARCHAR(32)  DEFAULT '' COMMENT 'googlekey',
+    sex         CHAR(1)      DEFAULT '0' COMMENT '用户性别（0男 1女）',
+    avatar      VARCHAR(100) DEFAULT '' COMMENT '头像地址',
+    password    VARCHAR(100) DEFAULT '' COMMENT '密码',
+    status      CHAR(1)      DEFAULT '0' COMMENT '帐号状态（0正常 1停用）',
+    del_flag    CHAR(1)      DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+    login_ip    VARCHAR(128) DEFAULT '' COMMENT '最后登录IP',
+    login_date  DATETIME COMMENT '最后登录时间',
+    create_by   VARCHAR(64)  DEFAULT '' COMMENT '创建者',
+    create_time DATETIME COMMENT '创建时间',
+    update_by   VARCHAR(64)  DEFAULT '' COMMENT '更新者',
+    update_time DATETIME COMMENT '更新时间',
+    remark      VARCHAR(500) DEFAULT NULL COMMENT '备注',
+    PRIMARY KEY (user_id)
+) ENGINE = innodb
+  AUTO_INCREMENT = 100 COMMENT = '用户信息表';
+
+-- ----------------------------
+-- 初始化-用户信息表数据
+-- ----------------------------
+INSERT INTO sys_user
+VALUES (1, 'admin', 'admin', '00', 'tao@163.com', '15888888888','SWYKZ6EJWR3Y5XVHX5HZEHJJEEK7HIQZ', '1', '',
+        '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', SYSDATE(), 'admin',
+        SYSDATE(), '', NULL, '管理员');
+INSERT INTO sys_user
+VALUES (2, 'tao', 'tao', '00', 'tao@qq.com', '15666666666','SWYKZ6EJWR3Y5XVHX5HZEHJJEEK7HIQZ', '1', '',
+        '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', SYSDATE(), 'admin',
+        SYSDATE(), '', NULL, '测试员');
+```
+
+#### 五. 添加controller参数
+
+##### SysLoginController.java
+
+添加loginBody.getGooglecode()
+
+```javascript
+
+public AjaxResult login(@RequestBody LoginBody loginBody) {
+        AjaxResult ajax = AjaxResult.success();
+        // 生成令牌
+        String token = loginService.login(loginBody.getUsername(), loginBody.getPassword(), loginBody.getCode(),
+                loginBody.getUuid(),loginBody.getGooglecode());
+        ajax.put(Constants.TOKEN, token);
+        return ajax;
+    }
+    
+```
+##### SysLoginService.java
+添加
+```javascript
+    @Resource
+    GoogleCodeService googleCodeService;
+
+```
+
+```javascript
+   LoginUser principal = (LoginUser) authentication.getPrincipal();
+        SysUser user = principal.getUser();
+        if (tokenService.isGoogleAuthenticator()) {
+          googleCodeService.verifyGooglecode(user,googlecode);
+        }
+```
+完全的参考:
+```javascript
+
+    @Resource
+    GoogleCodeService googleCodeService;
+
+    public String login(String username, String password, String code, String uuid, String googlecode)
+    {
+      // 用户验证
+      Authentication authentication = null;
+      try
+      {
+        // 该方法会去调用UserDetailsServiceImpl.loadUserByUsername
+        authentication = authenticationManager
+          .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        LoginUser principal = (LoginUser) authentication.getPrincipal();
+        SysUser user = principal.getUser();
+        if (tokenService.isGoogleAuthenticator()) {
+          googleCodeService.verifyGooglecode(user,googlecode);
+        }
+      }
+      catch (Exception e)
+      {
+        if (e instanceof BadCredentialsException)
+        {
+          AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.password.not.match")));
+          throw new UserPasswordNotMatchException();
+        }
+        else
+        {
+          AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, e.getMessage()));
+          throw new CustomException(e.getMessage());
+        }
+      }
+      AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
+      LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+      // 生成token
+      return tokenService.createToken(loginUser);
+    }
+
+```
+##### SysUser类添加字段:
+
+```javascript
+
+    /** 谷歌密钥 */
+    @Excel(name = "googlekey")
+    private String googlekey;
+
+```
+##### SysUserMapper.xml 添加
+
+注意:由于东西多,所以建议搜索googlekey关键字,来区分添加了什么
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tao.system.mapper.SysUserMapper">
+
+    <resultMap type="SysUser" id="SysUserResult">
+        <id property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="email" column="email"/>
+        <result property="phonenumber" column="phonenumber"/>
+        <result property="googlekey"  column="googlekey"  />
+        <result property="sex" column="sex"/>
+        <result property="avatar" column="avatar"/>
+        <result property="password" column="password"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="loginIp" column="login_ip"/>
+        <result property="loginDate" column="login_date"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <collection property="roles" javaType="java.util.List" resultMap="RoleResult"/>
+    </resultMap>
+
+
+    <resultMap id="RoleResult" type="SysRole">
+        <id property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="roleKey" column="role_key"/>
+        <result property="roleSort" column="role_sort"/>
+        <result property="dataScope" column="data_scope"/>
+        <result property="status" column="role_status"/>
+    </resultMap>
+
+    <sql id="selectUserVo">
+        SELECT u.user_id,
+        u.user_name,
+        u.nick_name,
+        u.email,
+        u.avatar,
+        u.phonenumber,
+        u.googlekey,
+        u.password,
+        u.sex,
+        u.status,
+        u.del_flag,
+        u.login_ip,
+        u.login_date,
+        u.create_by,
+        u.create_time,
+        u.remark,
+        r.role_id,
+        r.role_name,
+        r.role_key,
+        r.role_sort,
+        r.data_scope,
+        r.status AS role_status
+        FROM sys_user u
+        LEFT JOIN sys_user_role ur ON u.user_id = ur.user_id
+        LEFT JOIN sys_role r ON r.role_id = ur.role_id
+    </sql>
+
+    <select id="selectUserList" parameterType="SysUser" resultMap="SysUserResult">
+        select u.user_id, u.nick_name, u.user_name, u.email, u.avatar, u.phonenumber,u.googlekey, u.password, u.sex,
+        u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark from sys_user u
+        where u.del_flag = '0'
+        <if test="userName != null and userName != ''">
+            AND u.user_name like concat('%', #{userName}, '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND u.status = #{status}
+        </if>
+        <if test="phonenumber != null and phonenumber != ''">
+            AND u.phonenumber like concat('%', #{phonenumber}, '%')
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(u.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(u.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+        </if>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+
+    <select id="selectUserByUserName" parameterType="String" resultMap="SysUserResult">
+        <include refid="selectUserVo"/>
+        where u.user_name = #{userName}
+    </select>
+
+    <select id="selectUserById" parameterType="Long" resultMap="SysUserResult">
+        <include refid="selectUserVo"/>
+        where u.user_id = #{userId}
+    </select>
+
+    <select id="checkUserNameUnique" parameterType="String" resultType="int">
+        SELECT COUNT(1)
+        FROM sys_user
+        WHERE user_name = #{userName}
+        LIMIT 1
+    </select>
+
+    <select id="checkPhoneUnique" parameterType="String" resultMap="SysUserResult">
+        SELECT user_id, phonenumber
+        FROM sys_user
+        WHERE phonenumber = #{phonenumber}
+        LIMIT 1
+    </select>
+
+    <select id="checkEmailUnique" parameterType="String" resultMap="SysUserResult">
+        SELECT user_id, email
+        FROM sys_user
+        WHERE email = #{email}
+        LIMIT 1
+    </select>
+
+    <insert id="insertUser" parameterType="SysUser" useGeneratedKeys="true" keyProperty="userId">
+        insert into sys_user(
+        <if test="userId != null and userId != 0">user_id,</if>
+        <if test="userName != null and userName != ''">user_name,</if>
+        <if test="nickName != null and nickName != ''">nick_name,</if>
+        <if test="email != null and email != ''">email,</if>
+        <if test="avatar != null and avatar != ''">avatar,</if>
+        <if test="phonenumber != null and phonenumber != ''">phonenumber,</if>
+        <if test="googlekey != null and googlekey != ''">googlekey,</if>
+        <if test="sex != null and sex != ''">sex,</if>
+        <if test="password != null and password != ''">password,</if>
+        <if test="status != null and status != ''">status,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        create_time
+        )values(
+        <if test="userId != null and userId != ''">#{userId},</if>
+        <if test="userName != null and userName != ''">#{userName},</if>
+        <if test="nickName != null and nickName != ''">#{nickName},</if>
+        <if test="email != null and email != ''">#{email},</if>
+        <if test="avatar != null and avatar != ''">#{avatar},</if>
+        <if test="phonenumber != null and phonenumber != ''">#{phonenumber},</if>
+        <if test="googlekey != null and googlekey != ''">#{googlekey},</if>
+        <if test="sex != null and sex != ''">#{sex},</if>
+        <if test="password != null and password != ''">#{password},</if>
+        <if test="status != null and status != ''">#{status},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        sysdate()
+        )
+    </insert>
+
+    <update id="updateUser" parameterType="SysUser">
+        update sys_user
+        <set>
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="nickName != null and nickName != ''">nick_name = #{nickName},</if>
+            <if test="email != null ">email = #{email},</if>
+            <if test="phonenumber != null ">phonenumber = #{phonenumber},</if>
+            <if test="googlekey != null and googlekey != ''">googlekey = #{googlekey},</if>
+            <if test="sex != null and sex != ''">sex = #{sex},</if>
+            <if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="loginIp != null and loginIp != ''">login_ip = #{loginIp},</if>
+            <if test="loginDate != null">login_date = #{loginDate},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = sysdate()
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <update id="updateUserStatus" parameterType="SysUser">
+        UPDATE sys_user
+        SET status = #{status}
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="updateUserAvatar" parameterType="SysUser">
+        UPDATE sys_user
+        SET avatar = #{avatar}
+        WHERE user_name = #{userName}
+    </update>
+
+    <update id="resetUserPwd" parameterType="SysUser">
+        UPDATE sys_user
+        SET password = #{password}
+        WHERE user_name = #{userName}
+    </update>
+
+    <delete id="deleteUserById" parameterType="Long">
+        DELETE
+        FROM sys_user
+        WHERE user_id = #{userId}
+    </delete>
+
+    <delete id="deleteUserByIds" parameterType="Long">
+        update sys_user set del_flag = '2' where user_id in
+        <foreach collection="array" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+
+</mapper>
+
+```
+##### TokenService.java
+
+```javascript
+    @Data
+    public class TokenService
+    {
+        // 是否启动google身份验证
+        @Value("${token.googleAuthenticator}")
+        private boolean googleAuthenticator;
+
+```
+### (2). 前端的添加
+#### user/index.vue
+
+```html
+添加展示
+<el-table-column label="google key" align="center" prop="googlekey"  />
+
+添加form字段
+
+<el-col :span="12">
+  <el-form-item label="googlekey" prop="googlekey">
+    <el-input v-model="form.googlekey" placeholder="googlekey"  />
+  </el-form-item>
+</el-col>
+
+
+```
+```javascript
+ this.form = {
+  googlekey: undefined,
+}
+```
+#### login.js
+```javascript
+##加字段
+export function login(username, password, code, uuid, googlecode) {
+  const data = {
+    username,
+    password,
+    code,
+    uuid,
+    googlecode
+  }
+  return request({
+    url: '/login',
+    method: 'post',
+    data: data
+  })
+}
+
+创建方法:
+
+// 获取验证码
+  export function getIsEnabledGoogleAuth() {
+    return request({
+      url: '/isEnabledGoogleAuth',
+      method: 'get'
+    })
+  }
+  
+  
+```
+#### login.vue
+
+```html
+添加form
+
+<el-form-item v-if="isGoogleAuthenticatorEnabled">
+  <el-input v-model="loginForm.googlecode" type="number" placeholder="google code"  @keyup.enter.native="handleLogin">
+  </el-input>
+</el-form-item>
+
+
+```
+
+```javascript
+import {getIsEnabledGoogleAuth } from '@/api/login'
+
+data() {
+  return {
+    isGoogleAuthenticatorEnabled: false,
+    loginForm: {
+      googlecode: ""
+    },
+  }
+},
+created() {
+  this.getIsEnabledGoogleAuth();
+},
+methods: {
+  getIsEnabledGoogleAuth() {
+    getIsEnabledGoogleAuth().then(res => {
+      if (res) {
+        this.isGoogleAuthenticatorEnabled = res.isGoogleAuthenticatorEnabled;
+      }
+    });
+  },
+```
+
+#### request.js
+
+```javascript
+service.interceptors.request.use(config => {
+  config.headers['clientimestamp'] = Date.now();
+}
+```
+#### user.js
+
+```javascript
+actions: {
+ // 登录
+    Login({ commit }, userInfo) {
+      const googlecode = userInfo.googlecode
+      return new Promise((resolve, reject) => {
+        login(username, password, code, uuid, googlecode).then(res => {
+      })
+    },
+```
 
 ## 4.字段日期格式化
 
