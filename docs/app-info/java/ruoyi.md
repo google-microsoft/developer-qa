@@ -74,7 +74,7 @@ slug: /app-info/ruoyi
 
 如:
 
-```java
+```javascript
  /**
      * 生成BCryptPasswordEncoder密码
      *
@@ -113,7 +113,7 @@ xml依赖:
 </dependency>
 ```
 
-```java
+```javascript
 package com.ruoyi.common.utils;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
@@ -156,7 +156,7 @@ public class PHPpassword {
 
 ### (2).第二步:在SecurityConfig类里配置自己的密码匹配器
 
-```java
+```javascript
   @Bean
     public AuthenticationProvider authenticationProvider() {
         AuthenticationProvider authenticationProvider = new MyAuthenticationProvider();
@@ -166,7 +166,7 @@ public class PHPpassword {
 
 MyAuthenticationProvider类的内容:
 
-```java
+```javascript
 package com.ruoyi.framework.security.service;
 
 import com.ruoyi.common.exception.user.UserPasswordNotMatchException;
@@ -1008,7 +1008,7 @@ private Date operTime;
 
 ## 5.自定义dto转化器,如,把数组转成String
 
-```java 
+```javascript
     @Excel(name = "发布对象")
     @JsonSerialize(using = ArrayToStringJsonSerializer.class)
     @JsonDeserialize(using = StringJsonDeserializer.class)
@@ -1018,7 +1018,7 @@ private Date operTime;
 
 ArrayToStringJsonSerializer的内容:
 
-```java 
+```javascript
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -1044,7 +1044,7 @@ public class ArrayToStringJsonSerializer extends JsonSerializer<String> {
 
 StringJsonDeserializer的内容:
 
-```java 
+```javascript
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
