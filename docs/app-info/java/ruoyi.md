@@ -74,7 +74,7 @@ slug: /app-info/ruoyi
 
 如:
 
-```javascript
+```java
  /**
      * 生成BCryptPasswordEncoder密码
      *
@@ -113,7 +113,7 @@ xml依赖:
 </dependency>
 ```
 
-```javascript
+```java
 package com.ruoyi.common.utils;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
@@ -156,7 +156,7 @@ public class PHPpassword {
 
 ### (2).第二步:在SecurityConfig类里配置自己的密码匹配器
 
-```javascript
+```java
   @Bean
     public AuthenticationProvider authenticationProvider() {
         AuthenticationProvider authenticationProvider = new MyAuthenticationProvider();
@@ -166,7 +166,7 @@ public class PHPpassword {
 
 MyAuthenticationProvider类的内容:
 
-```javascript
+```java
 package com.ruoyi.framework.security.service;
 
 import com.ruoyi.common.exception.user.UserPasswordNotMatchException;
@@ -229,7 +229,7 @@ token:
 ```
 
 #### 二. CaptchaController 添加
-```javascript
+```java
 
     @Autowired
     private TokenService tokenService;
@@ -249,7 +249,7 @@ token:
 
 ##### GoogleAuthCodeException
 
-```javascript
+```java
 
 package com.ruoyi.common.exception.user;
 
@@ -266,7 +266,7 @@ public class GoogleAuthCodeException extends UserException {
 
 ##### GoogleAuthenticator
 
-```javascript
+```java
 package com.ruoyi.common.utils;
 
 import org.apache.commons.codec.binary.Base32;
@@ -348,7 +348,7 @@ public class GoogleAuthenticator {
 
 ```
 ##### GoogleCodeService
-```javascript
+```java
 
 package com.ruoyi.framework.web.service;
 
@@ -386,7 +386,7 @@ public class GoogleCodeService {
 
 ```
 ##### TOTP
-```javascript
+```java
 package com.ruoyi.common.utils;
 
 import javax.crypto.Mac;
@@ -500,7 +500,7 @@ public final class TOTP {
 
 ##### LoginBody
 
-```javascript
+```java
 import lombok.Data;
 
 @Data
@@ -515,7 +515,7 @@ user.google.not.match=googlecode校验失败
 ```
 ##### SecurityConfig 添加配置
 
-```javascript
+```java
 
 .authorizeRequests.antMatchers("/login", "/captchaImage","/isEnabledGoogleAuth").anonymous()
 
@@ -580,7 +580,7 @@ VALUES (2, 'tao', 'tao', '00', 'tao@qq.com', '15666666666','SWYKZ6EJWR3Y5XVHX5HZ
 
 添加loginBody.getGooglecode()
 
-```javascript
+```java
 
 public AjaxResult login(@RequestBody LoginBody loginBody) {
         AjaxResult ajax = AjaxResult.success();
@@ -594,13 +594,13 @@ public AjaxResult login(@RequestBody LoginBody loginBody) {
 ```
 ##### SysLoginService.java
 添加
-```javascript
+```java
     @Resource
     GoogleCodeService googleCodeService;
 
 ```
 
-```javascript
+```java
    LoginUser principal = (LoginUser) authentication.getPrincipal();
         SysUser user = principal.getUser();
         if (tokenService.isGoogleAuthenticator()) {
@@ -608,7 +608,7 @@ public AjaxResult login(@RequestBody LoginBody loginBody) {
         }
 ```
 完全的参考:
-```javascript
+```java
 
     @Resource
     GoogleCodeService googleCodeService;
@@ -650,7 +650,7 @@ public AjaxResult login(@RequestBody LoginBody loginBody) {
 ```
 ##### SysUser类添加字段:
 
-```javascript
+```java
 
     /** 谷歌密钥 */
     @Excel(name = "googlekey")
@@ -871,7 +871,7 @@ public AjaxResult login(@RequestBody LoginBody loginBody) {
 ```
 ##### TokenService.java
 
-```javascript
+```java
     @Data
     public class TokenService
     {
@@ -897,13 +897,13 @@ public AjaxResult login(@RequestBody LoginBody loginBody) {
 
 
 ```
-```javascript
+```java
  this.form = {
   googlekey: undefined,
 }
 ```
 #### login.js
-```javascript
+```java
 ##加字段
 export function login(username, password, code, uuid, googlecode) {
   const data = {
@@ -945,7 +945,7 @@ export function login(username, password, code, uuid, googlecode) {
 
 ```
 
-```javascript
+```java
 import {getIsEnabledGoogleAuth } from '@/api/login'
 
 data() {
@@ -971,14 +971,14 @@ methods: {
 
 #### request.js
 
-```javascript
+```java
 service.interceptors.request.use(config => {
   config.headers['clientimestamp'] = Date.now();
 }
 ```
 #### user.js
 
-```javascript
+```java
 actions: {
  // 登录
     Login({ commit }, userInfo) {
@@ -1008,7 +1008,7 @@ private Date operTime;
 
 ## 5.自定义dto转化器,如,把数组转成String
 
-```javascript
+```java
     @Excel(name = "发布对象")
     @JsonSerialize(using = ArrayToStringJsonSerializer.class)
     @JsonDeserialize(using = StringJsonDeserializer.class)
@@ -1018,7 +1018,7 @@ private Date operTime;
 
 ArrayToStringJsonSerializer的内容:
 
-```javascript
+```java
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -1044,7 +1044,7 @@ public class ArrayToStringJsonSerializer extends JsonSerializer<String> {
 
 StringJsonDeserializer的内容:
 
-```javascript
+```java
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -1257,7 +1257,7 @@ slave:
 
 2、在`DataSourceType`类添加数据源枚举
 
-```javascript
+```java
 /**
  * 从库
  */
@@ -1268,7 +1268,7 @@ SLAVE
 
 3、在`DruidConfig`配置读取数据源
 
-```javascript
+```java
 @Bean
 @ConfigurationProperties("spring.datasource.druid.slave")
 @ConditionalOnProperty(prefix = "spring.datasource.druid.slave", name = "enabled", havingValue = "true")
@@ -1283,7 +1283,7 @@ public DataSource slaveDataSource(DruidProperties druidProperties)
 
 4、在`DruidConfig`类`dataSource`方法添加数据源
 
-```javascript
+```java
 setDataSource(targetDataSources, DataSourceType.SLAVE.name(), "slaveDataSource");
 ```
 
@@ -1291,7 +1291,7 @@ setDataSource(targetDataSources, DataSourceType.SLAVE.name(), "slaveDataSource")
 
 
 
-```javascript
+```java
 @DataSource(value = DataSourceType.SLAVE)
 public List<SysUser> selectUserList(SysUser user)
 {
@@ -1303,7 +1303,7 @@ public List<SysUser> selectUserList(SysUser user)
 
 
 
-```javascript
+```java
 @Service
 @DataSource(value = DataSourceType.SLAVE)
 public class SysUserServiceImpl
@@ -1313,7 +1313,7 @@ public class SysUserServiceImpl
 
 对于特殊情况可以通过`DynamicDataSourceContextHolder`手动实现数据源切换
 
-```javascript
+```java
 public List<SysUser> selectUserList(SysUser user)
 {
 	DynamicDataSourceContextHolder.setDataSourceType(DataSourceType.SLAVE.name());
@@ -1327,7 +1327,7 @@ public List<SysUser> selectUserList(SysUser user)
 
 逻辑实现代码 `com.ruoyi.framework.aspectj.DataSourceAspect`
 
-```javascript
+```java
 注意：目前配置了一个从库，默认关闭状态。如果不需要多数据源不用做任何配置。 另外可新增多个从库。支持不同数据源（Mysql、Oracle、SQLServer）
 ```
 
