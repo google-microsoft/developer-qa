@@ -903,7 +903,7 @@ public AjaxResult login(@RequestBody LoginBody loginBody) {
 }
 ```
 #### login.js
-```java
+```javascript
 ##加字段
 export function login(username, password, code, uuid, googlecode) {
   const data = {
@@ -945,7 +945,7 @@ export function login(username, password, code, uuid, googlecode) {
 
 ```
 
-```java
+```javascript
 import {getIsEnabledGoogleAuth } from '@/api/login'
 
 data() {
@@ -971,14 +971,14 @@ methods: {
 
 #### request.js
 
-```java
+```javascript
 service.interceptors.request.use(config => {
   config.headers['clientimestamp'] = Date.now();
 }
 ```
 #### user.js
 
-```java
+```javascript
 actions: {
  // 登录
     Login({ commit }, userInfo) {
