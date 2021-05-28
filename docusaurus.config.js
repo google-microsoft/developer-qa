@@ -21,6 +21,9 @@ module.exports = {
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   themeConfig: {
+    prism: {
+      additionalLanguages: ['powershell', 'java', 'php', 'C#', 'rust'],
+    },
     navbar: {
       title: '技术常见解决方案',
       logo: {
