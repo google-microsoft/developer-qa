@@ -11,12 +11,11 @@
 module.exports = {
   title: '程序员常见问题解答',
   tagline: '',
-  onBrokenLinks: 'throw',
-
   url: 'https://google-microsoft.github.io', // Your website URL
   baseUrl: '/developer-qa/',
   projectName: 'developer-qa',
-  organizationName: 'developer-qa',
+  organizationName: 'google-microsoft',
+  onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   themeConfig: {
