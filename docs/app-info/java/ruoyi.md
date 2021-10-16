@@ -1335,3 +1335,17 @@ public List<SysUser> selectUserList(SysUser user)
 
 如果有Service方法内多个注解无效的情况使用内部方法调用
 SpringUtils.getAopProxy(this).xxxxxx(xxxx);
+
+## linux上excel导出报错问题解决:
+
+linux上excel导出报错问题解决:
+
+如果是centos linux是少了fontconfig三方模块:
+
+参考如下方式安装:
+
+yum -y install fontconfig
+
+fc-cache --force
+
+重新启动java服务即可
