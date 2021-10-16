@@ -6,7 +6,6 @@
  *
  * @format
  */
-
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: '程序员常见问题解答',

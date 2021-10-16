@@ -1,4 +1,6 @@
 
+export USE_SSH=true
+
 git add .
 git commit -m "update"
 git push
