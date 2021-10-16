@@ -13,11 +13,10 @@ module.exports = {
   tagline: '',
   onBrokenLinks: 'throw',
 
-  url: 'https://google-microsoft.github.io/developer-qa', // Your website URL
+  url: 'https://google-microsoft.github.io', // Your website URL
   baseUrl: '/developer-qa/',
   projectName: 'developer-qa',
-  organizationName: 'google-microsoft',
-
+  organizationName: 'developer-qa',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   themeConfig: {
